@@ -17398,14 +17398,14 @@ module.exports = require('./lib/React');
 
 var React = require('react');
 
-var ExampleApplication = React.createClass({
+var ExampleApplication = React.createClass({displayName: 'ExampleApplication',
   render: function() {
     var elapsed = Math.round(this.props.elapsed  / 100);
     var seconds = elapsed / 10 + (elapsed % 10 ? '' : '.0' );
     var message =
       'React has been successfully running for ' + seconds + ' seconds.';
 
-    return <p>{message}</p>;
+    return React.DOM.p(null, message);
   }
 });
 
@@ -17413,7 +17413,7 @@ var start = new Date().getTime();
 
 setInterval(function() {
   React.renderComponent(
-    <ExampleApplication elapsed={new Date().getTime() - start} />,
+    ExampleApplication({elapsed: new Date().getTime() - start}),
     document.getElementById('container')
   );
 }, 50);

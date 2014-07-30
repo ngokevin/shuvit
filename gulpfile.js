@@ -3,40 +3,50 @@ var gulp = require('gulp');
 var browserify = require('browserify');
 var del = require('del');
 // var imagemin = require('gulp-imagemin');
+var reactify = require('reactify');
 var source = require('vinyl-source-stream');
+var stylus = require('gulp-stylus');
 
 var paths = {
-    scripts: ['src/js/**/*'],
-    images: 'src/img/**/*'
+    css: ['src/css/**/*.styl'],
+    img: ['src/img/**/*'],
+    index_js: ['./src/js/index.jsx'],
+    js: ['src/js/*.js'],
 };
 
-// Not all tasks need to use streams
-// A gulpfile is just another node program and you can use all packages available on npm
+// A gulpfile is just another node program and you can use all packages available on npm.
 gulp.task('clean', function(cb) {
-    // You can use multiple globbing patterns as you would with `gulp.src`
+    // You can use multiple globbing patterns as you would with `gulp.src`.
     del(['build'], cb);
 });
 
-gulp.task('scripts', ['clean'], function() {
-    // Bundle the JS.
-    browserify('./src/js/index.js').bundle()
-        .pipe(source('bundle.js'))
-        .pipe(gulp.dest('./src/'));
+gulp.task('css', ['clean'], function() {
+    return gulp.src(paths.css)
+        .pipe(stylus())
+        .pipe(gulp.dest('./src/css'));
 });
 
-// Copy all static images
-gulp.task('images', ['clean'], function() {
-    return gulp.src(paths.images)
+gulp.task('img', ['clean'], function() {
+    return gulp.src(paths.img)
         // Pass in options to the task
         .pipe(imagemin({optimizationLevel: 5}))
         .pipe(gulp.dest('build/img'));
 });
 
+gulp.task('js', ['clean'], function() {
+    // Browserify/bundle the JS.
+    browserify(paths.index_js)
+        .transform(reactify)
+        .bundle()
+        .pipe(source('bundle.js'))
+        .pipe(gulp.dest('./src/'));
+});
+
 // Rerun the task when a file changes
 gulp.task('watch', function() {
-    gulp.watch(paths.scripts, ['scripts']);
-    // gulp.watch(paths.images, ['images']);
+    gulp.watch(paths.css, ['css']);
+    gulp.watch(paths.js, ['js']);
 });
 
 // The default task (called when you run `gulp` from cli)
-gulp.task('default', ['watch', 'scripts']);
+gulp.task('default', ['watch', 'css', 'js']);
