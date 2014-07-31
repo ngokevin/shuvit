@@ -1,0 +1,17 @@
+@import "lib";
+
+$background: #F7F7F7;
+$border: #DDD;
+$highlight: #34AADC;  // Blue.
+$second-highlight: #4CD964;  // Green.
+$subtext: #C7C7CC;
+$text: #1F1F21;
+
+$status-bar: 20px;
+
+html body {
+    background: $background;
+    border: 1px solid $border;
+    color: $text;
+    padding-top: $status-bar;
+}

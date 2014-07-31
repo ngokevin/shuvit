@@ -1,50 +1,60 @@
 var gulp = require('gulp');
-
 var browserify = require('browserify');
-var del = require('del');
-// var imagemin = require('gulp-imagemin');
-var reactify = require('reactify');
+var concat = require('gulp-concat');
+var minifyCss = require('gulp-minify-css');
+var rename = require('gulp-rename');
+var sass = require('gulp-sass');
 var source = require('vinyl-source-stream');
-var stylus = require('gulp-stylus');
 
 var paths = {
-    css: ['src/css/**/*.styl'],
-    img: ['src/img/**/*'],
-    index_js: ['./src/js/index.jsx'],
-    js: ['src/js/*.js'],
+    app_js: ['./www/js/app.js'],
+    css: ['./www/css/**/*.css'],
+    scss: ['./www/css/**/*.scss'],
+    ionic_scss: ['./scss/**/*.scss'],
+    img: ['www/img/**/*'],
+    js: ['www/js/*.js'],
 };
 
-// A gulpfile is just another node program and you can use all packages available on npm.
-gulp.task('clean', function(cb) {
-    // You can use multiple globbing patterns as you would with `gulp.src`.
-    del(['build'], cb);
+gulp.task('ionic_css', function(done) {
+    return gulp.src(paths.ionic_scss)
+        .pipe(sass())
+        .pipe(rename('bundle.css'))
+        .pipe(gulp.dest('./www/build/'));
 });
 
-gulp.task('css', ['clean'], function() {
-    return gulp.src(paths.css)
-        .pipe(stylus())
-        .pipe(gulp.dest('./src/css'));
+gulp.task('scss', function(done) {
+    return gulp.src(paths.scss)
+        .pipe(sass({
+            sourceMap: 'sass',
+            sourceComments: 'map'
+        }))
+        .pipe(gulp.dest('./www/css/'));
 });
 
-gulp.task('img', ['clean'], function() {
-    return gulp.src(paths.img)
-        // Pass in options to the task
-        .pipe(imagemin({optimizationLevel: 5}))
-        .pipe(gulp.dest('build/img'));
+gulp.task('css', ['ionic_css', 'scss'], function(done) {
+    gulp.src(paths.css.concat(['./www/build/bundle.css']))
+        .pipe(concat('bundle.css'))
+        .pipe(gulp.dest('./www/build/'))
+        .pipe(minifyCss({
+            keepSpecialComments: 0
+        }))
+        .pipe(rename({extname: '.min.css'}))
+        .pipe(gulp.dest('./www/build/'))
+        .end(done);
 });
 
-gulp.task('js', ['clean'], function() {
+gulp.task('js', function() {
     // Browserify/bundle the JS.
-    browserify(paths.index_js)
-        .transform(reactify)
+    browserify(paths.app_js)
         .bundle()
         .pipe(source('bundle.js'))
-        .pipe(gulp.dest('./src/'));
+        .pipe(gulp.dest('./www/build/'));
 });
 
 // Rerun the task when a file changes
 gulp.task('watch', function() {
     gulp.watch(paths.css, ['css']);
+    gulp.watch(paths.ionic_css, ['css']);
     gulp.watch(paths.js, ['js']);
 });
 

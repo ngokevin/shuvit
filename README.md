@@ -6,10 +6,11 @@ Poker tracker and pocket cruncher for live tournament poker players.
 
 Main Dependencies:
 
-- [React](http://facebook.github.io/react/) as JS framework.
+- [AngularJS](http://angularjs.org) for MVC.
 - [Browserify](http://browserify.org/) for bundling and third-party
   dependencies.
 - [Gulp](http://gulpjs.com) for automated build tasks.
+- [Ionic](http://ionicframework.com) for hybrid mobile app framework.
 
 ```npm install```
 ```node_modules/.bin/gulp```
