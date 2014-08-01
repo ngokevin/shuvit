@@ -1,5 +1,3 @@
-@import "lib";
-
 $background: #F7F7F7;
 $border: #DDD;
 $highlight: #34AADC;  // Blue.
@@ -12,11 +10,4 @@ $status-bar: 20px;
 html body {
     background: $background;
     color: $text;
-}
-
-.chart {
-    border: 1px solid $border;
-    height: 240px;
-    margin: 0 auto;
-    width: unquote('calc(100% - 10px)');
 }

@@ -1,0 +1,23 @@
+@import 'base';
+
+.chart {
+    font-size: 12px;
+    height: 240px;
+    margin: 0 auto;
+    width: 100%;
+
+    .line {
+        fill: none;
+        stroke: $second-highlight;
+        stroke-width: 1.5px;
+    }
+    .axis path,
+    .axis line {
+      fill: none;
+      shape-rendering: crispEdges;
+      stroke: $text;
+    }
+    .x.axis path {
+      display: none;
+    }
+}
