@@ -4,8 +4,9 @@
   "dependencies": {
     "angular": "*",
     "angular-ui-router": "*",
-    "cordova": "*",
     "browserify": "~3.44.2",
+    "cordova": "*",
+    "d3": "*",
     "envify": "~1.2.1",
     "ionic": "*",
     "gulp": "*",

@@ -11,6 +11,12 @@ $status-bar: 20px;
 
 html body {
     background: $background;
-    border: 1px solid $border;
     color: $text;
+}
+
+.chart {
+    border: 1px solid $border;
+    height: 240px;
+    margin: 0 auto;
+    width: unquote('calc(100% - 10px)');
 }

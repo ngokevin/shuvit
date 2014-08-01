@@ -53,7 +53,7 @@ gulp.task('js', function() {
 
 // Rerun the task when a file changes
 gulp.task('watch', function() {
-    gulp.watch(paths.css, ['css']);
+    gulp.watch(paths.scss, ['css']);
     gulp.watch(paths.ionic_css, ['css']);
     gulp.watch(paths.js, ['js']);
 });

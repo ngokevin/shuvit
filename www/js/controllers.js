@@ -1,7 +1,17 @@
+var chart = require('./chart');
+
 angular.module('sidekick.controllers', [])
 
-.controller('TrackerCtrl', function($scope) {
-})
+.controller('TrackerCtrl', ['$scope', 'SessionService', function($scope, SessionService) {
+    $scope.sessions = SessionService.get(true);
+    $scope.rangeDays = 365;
+
+    chart.CumulativeLineChart('.chart', $scope.sessions, {
+        xAxis: {
+            days: $scope.rangeDays
+        }
+    });
+}])
 
 .controller('ToolsCtrl', function($scope) {
 })
