@@ -12,6 +12,9 @@ function CumulativeLineChart(element, rawData, _cfg) {
     var cfg = {
         xAxis: {
             days: -1
+        },
+        yAxis: {
+            field: 'value'
         }
     };
 
@@ -42,11 +45,9 @@ function CumulativeLineChart(element, rawData, _cfg) {
             rawData = trim(rawData);
         }
 
-        // Calculate profits.
-        var cumulativeProfit = 0;
+        // Flatten.
         rawData = _.map(rawData, function(d) {
-            cumulativeProfit += (d.result - d.buyin);
-            return cumulativeProfit;
+            return d[cfg.yAxis.field];
         });
 
         // Start at 0.

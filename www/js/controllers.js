@@ -9,6 +9,9 @@ angular.module('sidekick.controllers', [])
     chart.CumulativeLineChart('.chart', $scope.sessions, {
         xAxis: {
             days: $scope.rangeDays
+        },
+        yAxis: {
+            field: 'cumulativeProfit',
         }
     });
 }])
