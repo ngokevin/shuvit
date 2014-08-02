@@ -1,4 +1,7 @@
 var angular = require('angular');
+var $ = require('jquery');
+window.jQuery = $;
+
 require('angular-animate');
 require('angular-ui-router');
 require('./controllers');

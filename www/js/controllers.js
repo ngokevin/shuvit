@@ -1,4 +1,5 @@
 var Modernizr = require('modernizr');
+var $ = require('jquery');
 var _ = require('underscore');
 var chart = require('./chart');
 
@@ -24,7 +25,9 @@ angular.module('sidekick.controllers', [])
 }])
 
 .controller('AddSessionCtrl', function($scope) {
-    $scope.dateSupport = Modernizr.inputtypes.date;
+    if (!Modernizr.inputtypes.date) {
+        $('input[type="date"]').pickadate();
+    }
 })
 
 .controller('ToolsCtrl', function($scope) {

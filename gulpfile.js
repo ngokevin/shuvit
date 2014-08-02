@@ -8,9 +8,11 @@ var source = require('vinyl-source-stream');
 
 var paths = {
     app_js: ['./www/js/app.js'],
+    bower_js: ['./bower_components/pickadate/lib/picker.js',
+               './bower_components/pickadate/lib/picker.date.js'],
     css: ['./www/css/**/*.css'],
     scss: ['./www/css/**/*.scss'],
-    ionic_scss: ['./scss/**/*.scss', './www/lib/ionic/scss/**/*.scss'],
+    ionic_scss: ['./scss/**/*.scss'],
     img: ['www/img/**/*'],
     js: ['www/js/*.js'],
 };
@@ -43,7 +45,13 @@ gulp.task('css', ['ionic_css', 'scss'], function(done) {
         .end(done);
 });
 
-gulp.task('js', function() {
+gulp.task('bower_js', function() {
+    gulp.src(paths.bower_js)
+        .pipe(concat('bower_bundle.js'))
+        .pipe(gulp.dest('./www/build'));
+});
+
+gulp.task('js', ['bower_js'], function() {
     // Browserify/bundle the JS.
     browserify(paths.app_js)
         .bundle()

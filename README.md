@@ -13,4 +13,5 @@ Main Dependencies:
 - [Ionic](http://ionicframework.com) for hybrid mobile app framework.
 
 ```npm install```
+```bower install```
 ```node_modules/.bin/gulp```
