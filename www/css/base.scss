@@ -11,3 +11,16 @@ html body {
     background: $background;
     color: $text;
 }
+
+.item-input.pickadate-wrapper {
+    position: static;
+
+    input[readonly] {
+        background: none;
+        cursor: text;
+    }
+    .picker {
+        right: 0;
+        top: 50px;
+    }
+}

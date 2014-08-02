@@ -1,9 +1,32 @@
 <ion-view title="Adding a Session">
   <ion-content class="padding">
-    <label class="item item-input">
-      <span class="input-label">Date</span>
-      <input type="date"></input>
-    </label>
+    <div class="list">
+      <label class="item item-input" ng-show="dateSupport">
+        <span class="input-label">Date</span>
+        <input type="date" placeholder="Tap to choose a date..."></input>
+      </label>
+
+      <label class="item item-input pickadate-wrapper" ng-show="!dateSupport">
+        <span class="input-label">Date</span>
+        <input type="text" class="datepicker" placeholder="Tap to choose a date..."></input>
+      </label>
+    </div>
+
+    <div class="list">
+      <label class="item item-input item-floating-label">
+        <span class="input-label">Buy-In ($)</span>
+        <input type="tel" pattern="\d*" placeholder="Buy-In ($)"></input>
+      </label>
+      <label class="item item-input item-floating-label">
+        <span class="input-label">Result ($)</span>
+        <input type="tel" pattern="\d*" placeholder="Result ($)"></input>
+      </label>
+      <label class="item item-input item-floating-label">
+        <span class="input-label">Tournament/Session Name</span>
+        <input type="tel" pattern="\d*" placeholder="Tournament/Session Name"></input>
+      </label>
+    </div>
+
     <button class="button button-block button-balanced">
       <i class="icon ion-checkmark-round"></i> Add Session
     </button>
