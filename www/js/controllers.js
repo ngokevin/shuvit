@@ -1,3 +1,5 @@
+var Modernizr = require('modernizr');
+var _ = require('underscore');
 var chart = require('./chart');
 
 angular.module('sidekick.controllers', [])
@@ -6,7 +8,7 @@ angular.module('sidekick.controllers', [])
     $scope.sessions = SessionService.get(true);
     $scope.rangeDays = 365;
 
-    chart.CumulativeLineChart('.chart', $scope.sessions, {
+    var currentChart = chart.CumulativeLineChart('.chart', $scope.sessions, {
         xAxis: {
             days: $scope.rangeDays
         },
@@ -14,7 +16,16 @@ angular.module('sidekick.controllers', [])
             field: 'cumulativeProfit',
         }
     });
+
+    window.onresize = _.debounce(function() {
+        // Resize the chart if viewport changes.
+        currentChart.refresh($scope.sessions);
+    }, 100);
 }])
+
+.controller('AddSessionCtrl', function($scope) {
+    $scope.dateSupport = Modernizr.inputtypes.date;
+})
 
 .controller('ToolsCtrl', function($scope) {
 })

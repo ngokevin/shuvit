@@ -2,22 +2,30 @@
   "name": "tournament-poker-sidekick",
   "description": "Poker tracker and pocket cruncher for live tournament poker players.",
   "dependencies": {
-    "angular": "*",
-    "angular-ui-router": "*",
+    "angular": "1.2.19",
+    "angular-ui-router": "0.2.10",
+    "angular-animate": "1.2.16",
     "browserify": "~3.44.2",
+    "browserify-shim": "3.6.0",
     "cordova": "*",
-    "d3": "*",
+    "d3": "3.4.11",
     "envify": "~1.2.1",
-    "ionic": "*",
-    "gulp": "*",
+    "ionic": "1.1.6",
+    "gulp": "3.8.7",
     "gulp-concat": "^2.2.0",
     "gulp-minify-css": "^0.3.0",
     "gulp-rename": "*",
-    "jquery": "*",
+    "jquery": "2.1.1",
     "vinyl-source-stream": "*",
-    "underscore": "*"
+    "underscore": "1.6.0"
   },
-  "scripts": {
-    "build": "browserify --debug --transform reactify index.js > bundle.js"
+  "browser": {
+    "modernizr": "./bower_components/modernizr/modernizr.js"
+  },
+  "browserify-shim": {
+    "modernizr": "Modernizr"
+  },
+  "browserify": {
+    "transform": ["browserify-shim"]
   }
 }

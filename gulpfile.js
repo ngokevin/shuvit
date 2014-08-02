@@ -10,7 +10,7 @@ var paths = {
     app_js: ['./www/js/app.js'],
     css: ['./www/css/**/*.css'],
     scss: ['./www/css/**/*.scss'],
-    ionic_scss: ['./scss/**/*.scss'],
+    ionic_scss: ['./scss/**/*.scss', './www/lib/ionic/scss/**/*.scss'],
     img: ['www/img/**/*'],
     js: ['www/js/*.js'],
 };

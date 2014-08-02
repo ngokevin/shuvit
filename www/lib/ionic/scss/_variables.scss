@@ -3,10 +3,10 @@
 // -------------------------------
 
 $light:                           #fff !default;
-$stable:                          #f8f8f8 !default;
+$stable:                          #f7f7f7 !default;  // MODIFIED: #f8f8f8;
 $positive:                        #4a87ee !default;
 $calm:                            #43cee6 !default;
-$balanced:                        #66cc33 !default;
+$balanced:                        #4CD964 !default;  // MODIFIED: #66cc33;
 $energized:                       #f0b840 !default;
 $assertive:                       #ef4e3a !default;
 $royal:                           #8a6de9 !default;
@@ -75,7 +75,7 @@ $button-border-width:             1px !default;
 $button-font-size:                16px !default;
 $button-height:                   42px !default;
 $button-padding:                  12px !default;
-$button-icon-size:                24px !default;
+$button-icon-size:                16px !default;  // MODIFIED: 24px;
 
 $button-large-font-size:          20px !default;
 $button-large-height:             54px !default;
@@ -124,7 +124,7 @@ $button-assertive-active-border:  darken($assertive, 15%) !default;
 
 $button-balanced-bg:              $balanced !default;
 $button-balanced-text:            #fff !default;
-$button-balanced-border:          darken($balanced, 15%) !default;
+$button-balanced-border:          $balanced !default;  // MODIFIED: darken($balanced, 15%);
 $button-balanced-active-bg:       darken($balanced, 15%) !default;
 $button-balanced-active-border:   darken($balanced, 15%) !default;
 

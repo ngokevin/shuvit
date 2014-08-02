@@ -1,4 +1,5 @@
 var angular = require('angular');
+require('angular-animate');
 require('angular-ui-router');
 require('./controllers');
 require('./services');
@@ -41,6 +42,16 @@ angular.module('sidekick', ['ionic', 'sidekick.controllers',
       }
     })
 
+    .state('tab.add_session', {
+      url: '/add_session',
+      views: {
+        'tracker': {
+          templateUrl: 'templates/add_session.html',
+          controller: 'AddSessionCtrl'
+        }
+      }
+    })
+
     .state('tab.tools', {
       url: '/tools',
       views: {
@@ -62,5 +73,5 @@ angular.module('sidekick', ['ionic', 'sidekick.controllers',
     })
 
   $urlRouterProvider.otherwise('/tab/tracker');
+  window.location.href = window.location.pathname + '#/tab/tracker';
 });
-

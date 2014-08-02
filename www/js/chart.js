@@ -18,10 +18,12 @@ function CumulativeLineChart(element, rawData, _cfg) {
         }
     };
 
-    init(rawData, _cfg);  // Link. Start!.
+    init(element, rawData, _cfg);  // Link. Start!.
 
-    function init(rawData, _cfg) {
-        cfg = $.extend(true, {}, cfg, _cfg);
+    function init(element, rawData, _cfg) {
+        if (_cfg) {
+            cfg = $.extend(true, {}, cfg, _cfg);
+        }
 
         height = $('.chart').height() - margin.top - margin.bottom;
         width = $('.chart').width() - margin.left - margin.right;
@@ -117,9 +119,9 @@ function CumulativeLineChart(element, rawData, _cfg) {
             .attr('d', line);
     }
 
-    function refresh(newRawData, cfg) {
+    function refresh(newRawData) {
         $(element + ' svg').remove();
-        init(element, newRawData, cfg);
+        init(element, newRawData);
     }
 
     return {
