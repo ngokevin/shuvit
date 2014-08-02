@@ -26,12 +26,28 @@ angular.module('sidekick.controllers', [])
     }, 100);
 }])
 
-.controller('AddSessionCtrl', function($scope) {
+.controller('AddSessionCtrl', ['$scope', '$state', '$timeout', 'SessionService',
+    function($scope, $state, $timeout, SessionService) {
+    // Set up date picker.
     $scope.dateSupport = Modernizr.inputtypes.date;
-    if (!Modernizr.inputtypes.date) {
-        $('.datepicker').pickadate();
+    if (!$scope.dateSupport) {
+        var picker = $('.datepicker').pickadate({
+            'onSet': function(value) {
+                $scope.$apply(function() {
+                    $scope.date = value.select;
+                });
+            }
+        });
     }
-})
+
+    // Add session using service.
+    $scope.addSession = function() {
+        if (SessionService.add($scope.date, $scope.buyin, $scope.result,
+                               $scope.cash, $scope.location, $scope.notes)) {
+            $state.go('tab.tracker');
+        }
+    };
+}])
 
 .controller('ToolsCtrl', function($scope) {
 })

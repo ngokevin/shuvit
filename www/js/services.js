@@ -23,12 +23,35 @@ angular.module('sidekick.services', [])
             return transform(sessions);
         },
 
-        add: function(session) {
-            sessions.push(session);
+        add: function(date, buyin, result, cash, location, notes) {
+            /* Add a session.
+             * date -- in milliseconds
+             * buyin -- integer, how much they bought in with
+             * result -- integer, how much they came out with including buyin
+             * cash -- cash vs tournmanet, boolean
+             * location -- name/place they played, string
+             * notes -- miscellaneous notes, string
+             */
+            if (!(date && buyin >= 0 && result >= 0)) {
+                // Validate.
+                return;
+            }
+
+            sessions.push({
+                id: sessions.length,
+                date: date,
+                buyin: buyin,
+                result: result,
+                cash: cash || false,
+                location: location,
+                notes: notes
+            });
             sessions = _.sortBy(sessions, function(_session) {
                 return _session.data;
             });
             save();
+
+            return true;
         },
 
         del: function(session) {
