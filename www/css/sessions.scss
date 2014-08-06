@@ -1,0 +1,26 @@
+@import 'base';
+
+.session-subheader {
+    color: $subtext;
+    position: relative;
+
+    li {
+        display: inline-block;
+
+        &.date {
+            width: 100px;
+        }
+        &.profit {
+            font-family: monospace;
+            position: absolute;
+            right: 0;
+            text-align: right;
+        }
+        &.negative {
+            color: $assertive;
+        }
+        &.positive {
+            color: $balanced;
+        }
+    }
+}

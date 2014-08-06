@@ -5,11 +5,12 @@ window.jQuery = $;
 require('angular-animate');
 require('angular-ui-router');
 require('./controllers');
+require('./filters');
 require('./services');
 require('./settings');
 
 angular.module('sidekick', ['ionic', 'sidekick.controllers',
-                            'sidekick.services'])
+                            'sidekick.filters', 'sidekick.services'])
 
 .run(['$ionicPlatform', function($ionicPlatform) {
     $ionicPlatform.ready(function() {
@@ -45,12 +46,32 @@ angular.module('sidekick', ['ionic', 'sidekick.controllers',
             }
         })
 
-        .state('tab.add_session', {
-            url: '/add_session',
+        .state('tab.session_add', {
+            url: '/session/add',
             views: {
                 'tracker': {
-                    templateUrl: 'templates/add_session.html',
-                    controller: 'AddSessionCtrl'
+                    templateUrl: 'templates/session/add.html',
+                    controller: 'SessionAddCtrl'
+                }
+            }
+        })
+
+        .state('tab.session_list', {
+            url: '/session/list',
+            views: {
+                'tracker': {
+                    templateUrl: 'templates/session/list.html',
+                    controller: 'SessionListCtrl'
+                }
+            }
+        })
+
+        .state('tab.session_detail', {
+            url: '/session/:sessionId',
+            views: {
+                'tracker': {
+                    templateUrl: 'templates/session/detail.html',
+                    controller: 'SessionDetailCtrl'
                 }
             }
         })

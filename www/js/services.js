@@ -72,7 +72,8 @@ angular.module('sidekick.services', [])
         var cumulativeProfit = 0;
         _sessions = _.map(_sessions, function(d) {
             // Calculate profits.
-            cumulativeProfit += (d.result - d.buyin);
+            d.profit = d.result - d.buyin;
+            cumulativeProfit += d.profit;
             d.cumulativeProfit = cumulativeProfit;
             return d;
         });

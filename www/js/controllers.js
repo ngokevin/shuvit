@@ -26,8 +26,8 @@ angular.module('sidekick.controllers', [])
     }, 100);
 }])
 
-.controller('AddSessionCtrl', ['$scope', '$state', '$timeout', 'SessionService',
-    function($scope, $state, $timeout, SessionService) {
+.controller('SessionAddCtrl', ['$scope', '$state', 'SessionService',
+    function($scope, $state, SessionService) {
     $scope.session = {
         date: null,
         buyin: null,
@@ -62,6 +62,16 @@ angular.module('sidekick.controllers', [])
             $state.go('tab.tracker');
         }
     };
+}])
+
+.controller('SessionListCtrl', ['$scope', 'SessionService',
+    function($scope, SessionService) {
+    $scope.sessions = SessionService.get();
+}])
+
+.controller('SessionDetailCtrl', ['$scope', 'SessionService',
+    function($scope, SessionService) {
+    $scope.sessions = SessionService.get();
 }])
 
 .controller('ToolsCtrl', function($scope) {
