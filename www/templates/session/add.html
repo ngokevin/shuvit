@@ -1,15 +1,16 @@
-<ion-view title="Adding a Session">
+<ion-view title="Add Session">
   <ion-content class="padding">
     <div class="list">
-      <label class="item item-input" ng-show="dateSupport">
-        <span class="input-label">Date</span>
-        <input type="date" placeholder="Tap to choose a date..."
-               ng-model="session.date"></input>
-      </label>
-
       <label class="item item-input pickadate-wrapper" ng-show"!dateSupport">
         <span class="input-label">Date</span>
         <input type="text" class="datepicker" placeholder="Tap to choose a date..."></input>
+      </label>
+
+      <label class="item item-input">
+        <span class="input-label">Title</span>
+        <input type="text" placeholder="{{ session.cash && '$1/$3 at the Bellagio' ||
+                                           '$5K Guaranteed at the Aria' }}"
+               ng-model="session.title"></input>
       </label>
 
       <label class="item item-input">
@@ -32,12 +33,7 @@
            </div>
          </label>
       </li>
-      <label class="item item-input">
-        <span class="input-label">Location</span>
-        <input type="tel" pattern="\d*"
-          placeholder="{{ cash && '$1/$3 at the Bellagio' ||
-                          '$5K Guaranteed at the Aria' }}" ng-model="session.location"></input>
-      </label>
+
       <label class="item item-input">
         <textarea placeholder="Session notes" ng-model="session.notes"></textarea>
       </label>

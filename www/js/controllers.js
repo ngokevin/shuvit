@@ -31,23 +31,20 @@ angular.module('sidekick.controllers', [])
     $scope.session = {
         date: null,
         buyin: null,
-        result: null,
-        location: null,
         cash: null,
-        notes: null
+        notes: null,
+        result: null,
+        title: null
     };
 
     // Set up date picker.
-    $scope.dateSupport = Modernizr.inputtypes.date;
-    if (!$scope.dateSupport) {
-        var picker = $('.datepicker').pickadate({
-            'onSet': function(value) {
-                $scope.$apply(function() {
-                    $scope.session.date = value.select;
-                });
-            }
-        });
-    }
+    var picker = $('.datepicker').pickadate({
+        'onSet': function(value) {
+            $scope.session.date = value.select;
+            $scope.$$phase || $scope.$apply();
+        }
+    });
+    picker.pickadate('picker').set('select', new Date().valueOf());
 
     // Check form validity.
     $scope.$watch('[session.date, session.buyin, session.result]', function() {
@@ -67,6 +64,12 @@ angular.module('sidekick.controllers', [])
 .controller('SessionListCtrl', ['$scope', 'SessionService',
     function($scope, SessionService) {
     $scope.sessions = SessionService.get();
+
+    $scope.deleteSession = function(i) {
+        var id = $scope.sessions[i].id;
+        SessionService.del(id);
+        $scope.sessions.splice(i, 1);
+    };
 }])
 
 .controller('SessionDetailCtrl', ['$scope', '$stateParams', 'SessionService',

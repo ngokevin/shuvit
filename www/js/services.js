@@ -4,7 +4,7 @@ var _ = require('underscore');
 angular.module('sidekick.services', [])
 
 .service('SessionService', function() {
-    // Session => {id, start, buyin, profit, hours, location, entrants, place, notes}
+    // Session => {id, buyin, cash, date, notes, result, title}
     var sessions = [];
     if (localStorage.getItem('sessions')) {
         sessions = deserialize(localStorage.getItem('sessions'));
@@ -29,9 +29,9 @@ angular.module('sidekick.services', [])
              * buyin -- integer, how much they bought in with
              * cash -- cash vs tournmanet, boolean
              * date -- in milliseconds
-             * location -- name/place they played, string
              * notes -- miscellaneous notes, string
              * result -- integer, how much they came out with including buyin
+             * title -- name of session, string
              */
             if (!(session.date && session.buyin >= 0 && session.result >= 0)) {
                 // Validate.
@@ -44,9 +44,9 @@ angular.module('sidekick.services', [])
                 buyin: parseInt(session.buyin, 10),
                 cash: session.cash || false,
                 date: session.date,
-                location: session.location,
                 notes: session.notes,
                 result: parseInt(session.result, 10),
+                title: session.title,
             });
 
             sessions = _.sortBy(sessions, function(_session) {
@@ -57,9 +57,9 @@ angular.module('sidekick.services', [])
             return true;
         },
 
-        del: function(session) {
-            sessions = _.reject(sessions, function(_session) {
-                return _session.id == session.id;
+        del: function(id) {
+            sessions = _.reject(sessions, function(session) {
+                return session.id == id;
             });
             save();
         },
@@ -72,7 +72,13 @@ angular.module('sidekick.services', [])
         var cumulativeProfit = 0;
         var index = 0;
         _sessions = _.map(_sessions, function(d) {
+            // Index.
             d.index = index++;
+
+            // Title if it doesn't exist.
+            if (!d.title) {
+                d.title = 'Session #' + (d.index + 1);
+            }
 
             // Calculate profits.
             d.profit = d.result - d.buyin;
