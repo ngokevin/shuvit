@@ -69,9 +69,14 @@ angular.module('sidekick.controllers', [])
     $scope.sessions = SessionService.get();
 }])
 
-.controller('SessionDetailCtrl', ['$scope', 'SessionService',
-    function($scope, SessionService) {
-    $scope.sessions = SessionService.get();
+.controller('SessionDetailCtrl', ['$scope', '$stateParams', 'SessionService',
+    function($scope, $stateParams, SessionService) {
+    var sessions = SessionService.get();
+
+    var sessionId = $stateParams.sessionId;
+    $scope.session = _.filter(sessions, function(session) {
+        return session.id == sessionId;
+    })[0];
 }])
 
 .controller('ToolsCtrl', function($scope) {

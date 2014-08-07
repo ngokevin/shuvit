@@ -2,12 +2,13 @@
   <ion-content>
     <ion-list can-swipe="true">
       <ion-item ng-repeat="session in sessions.slice().reverse()"
-                href="{{ '#/tab/session/' + session.id }}">
-        <h2>{{ session.location || 'Session #' + (sessions.length - $index) }}</h2>
+                href="#/tab/session/{{ session.id }}">
+        <h2>{{ session.location || 'Session #' + session.index }}</h2>
         <ul class="session-subheader">
           <li class="date">{{ session.date | date: 'mediumDate' }}</li>
-          <li class="profit" ng-class="{negative: session.profit < 0, positive: session.profit >= 0}">
-            {{ session.profit >= 0 && '+' || '-' }}${{ session.profit | abs }}
+          <li class="profit"
+              ng-class="{negative: session.profit < 0, positive: session.profit >= 0}">
+            {{ session.profit | profit }}
           </li>
         </ul>
 

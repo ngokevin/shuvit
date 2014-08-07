@@ -67,7 +67,7 @@ angular.module('sidekick', ['ionic', 'sidekick.controllers',
         })
 
         .state('tab.session_detail', {
-            url: '/session/:sessionId',
+            url: '^/tab/session/{sessionId:[0-9]}',
             views: {
                 'tracker': {
                     templateUrl: 'templates/session/detail.html',

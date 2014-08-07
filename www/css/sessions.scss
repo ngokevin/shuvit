@@ -10,17 +10,54 @@
         &.date {
             width: 100px;
         }
-        &.profit {
-            font-family: monospace;
-            position: absolute;
-            right: 0;
-            text-align: right;
-        }
-        &.negative {
-            color: $assertive;
-        }
-        &.positive {
-            color: $balanced;
+    }
+}
+
+.profit,
+.money {
+    font-family: monospace;
+    font-weight: normal;
+    text-align: right;
+
+    &.negative {
+        color: $assertive;
+    }
+    &.positive {
+        color: $balanced;
+    }
+}
+
+.profit {
+    position: absolute;
+    right: 0;
+}
+
+.item-divider.subtext {
+    color: $subtext;
+}
+
+.session.card {
+    .date {
+        color: $subtext;
+    }
+    .money,
+    .profit {
+        position: absolute;
+        right: 15px;
+    }
+    .money {
+        bottom: 17px;
+    }
+    .icon {
+        display: inline-block;
+        font-size: 24px;
+        margin-right: 16px;
+        text-align: right;
+        width: 24px;
+
+        + span:not(.money) {
+            bottom: 3px;
+            position: relative;
         }
     }
 }

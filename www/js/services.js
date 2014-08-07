@@ -70,7 +70,10 @@ angular.module('sidekick.services', [])
 
         // Attach helper data.
         var cumulativeProfit = 0;
+        var index = 0;
         _sessions = _.map(_sessions, function(d) {
+            d.index = index++;
+
             // Calculate profits.
             d.profit = d.result - d.buyin;
             cumulativeProfit += d.profit;

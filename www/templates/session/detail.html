@@ -1,23 +1,40 @@
-<ion-view title="Viewing Sessions">
+<ion-view title="Viewing {{ 'Session #' + session.index }}">
   <ion-content>
-    <ion-list can-swipe="true">
-      <ion-item ng-repeat="session in sessions.slice().reverse()"
-                href="{{ '#/session/' + session.id }}">
-        <h2>{{ session.location || 'Session #' + (sessions.length - $index) }}</h2>
-        <ul class="session-subheader">
-          <li class="date">{{ session.date | date: 'mediumDate' }}</li>
-          <li class="profit" ng-class="{negative: session.profit < 0, positive: session.profit >= 0}">
-            {{ session.profit >= 0 && '+' || '-' }}${{ session.profit | abs }}
-          </li>
-        </ul>
+    <div class="card session">
+      <div class="item item-divider">
+        {{ session.location || 'Session #' + session.index }}
+      </div>
 
-        <ion-delete-button class="ion-minus-circled"
-                           ng-click="deleteSession($index)"></ion-delete-button>
+      <div class="item item-divider">
+        <span class="date">{{ session.date | date: 'mediumDate' }}</span>
+        <span class="profit"
+            ng-class="{negative: session.profit < 0, positive: session.profit >= 0}">
+          {{ session.profit|profit }}
+        </span>
+      </div>
 
-        <ion-option-button class="button-assertive" ng-click="delete(session)">
-          Delete
-        </ion-option-button>
-      </ion-item>
-    </ion-list>
+      <div class="item item-text-wrap">
+        <i class="icon ion-card"></i>
+        <span class="money">${{ session.buyin }}</span>
+      </div>
+
+      <div class="item item-text-wrap">
+        <i class="icon ion-cash"></i>
+        <span class="money">${{ session.result }}</span>
+      </div>
+
+      <div class="item item-divider subtext">
+        Misc.
+      </div>
+
+      <div class="item item-text-wrap">
+        <i class="icon ion-ios7-folder-outline"></i>
+        <span>{{ session.cash && 'Cash' || 'Tournament' }}</span>
+      </div>
+
+      <div class="item item-text-wrap" ng-show="{{ session.notes }}">
+        {{ session.notes }}
+      </div>
+    </div>
   </ion-content>
 </ion-view>
