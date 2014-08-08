@@ -5,7 +5,7 @@ var chart = require('./chart');
 require('./picker');
 require('./picker.date');
 
-angular.module('sidekick.controllers', [])
+angular.module('shuvit.controllers', [])
 
 .controller('TrackerCtrl', ['$scope', 'SessionService', function($scope, SessionService) {
     $scope.sessions = SessionService.get();

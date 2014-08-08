@@ -1,7 +1,7 @@
 var $ = require('jquery');
 var _ = require('underscore');
 
-angular.module('sidekick.services', [])
+angular.module('shuvit.services', [])
 
 .service('SessionService', function() {
     // Session => {id, buyin, cash, date, notes, result, title}

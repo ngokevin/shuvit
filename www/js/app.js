@@ -9,8 +9,8 @@ require('./filters');
 require('./services');
 require('./settings');
 
-angular.module('sidekick', ['ionic', 'sidekick.controllers',
-                            'sidekick.filters', 'sidekick.services'])
+angular.module('shuvit', ['ionic', 'shuvit.controllers',
+                            'shuvit.filters', 'shuvit.services'])
 
 .run(['$ionicPlatform', function($ionicPlatform) {
     $ionicPlatform.ready(function() {

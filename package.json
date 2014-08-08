@@ -1,5 +1,5 @@
 {
-  "name": "tournament-poker-sidekick",
+  "name": "shuvit",
   "description": "Poker tracker and pocket cruncher for live tournament poker players.",
   "dependencies": {
     "angular": "1.2.19",

@@ -1,4 +1,4 @@
-angular.module('sidekick.filters', [])
+angular.module('shuvit.filters', [])
 
 .filter('abs', function() {
    return function(val) {

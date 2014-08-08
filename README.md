@@ -1,5 +1,5 @@
-tournament-poker-sidekick
-=========================
+shuvit
+======
 
 Poker tracker and pocket cruncher for live tournament poker players.
 [Details](http://ngokevin.com/blog/poker19/).
