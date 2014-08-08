@@ -14,4 +14,5 @@ Main Dependencies:
 
 ```npm install```
 ```bower install```
+```cp www/js/settings_local.js.dist www/js/settings_local.js```
 ```node_modules/.bin/gulp```

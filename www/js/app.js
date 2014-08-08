@@ -10,7 +10,7 @@ require('./services');
 require('./settings');
 
 angular.module('shuvit', ['ionic', 'shuvit.controllers',
-                            'shuvit.filters', 'shuvit.services'])
+                          'shuvit.filters', 'shuvit.services'])
 
 .run(['$ionicPlatform', function($ionicPlatform) {
     $ionicPlatform.ready(function() {

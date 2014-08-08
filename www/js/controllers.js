@@ -4,6 +4,7 @@ var _ = require('underscore');
 var chart = require('./chart');
 require('./picker');
 require('./picker.date');
+var settings = require('./settings');
 
 angular.module('shuvit.controllers', [])
 
@@ -86,4 +87,20 @@ angular.module('shuvit.controllers', [])
 })
 
 .controller('SettingsCtrl', function($scope) {
+    $scope.linkDropbox = function() {
+        var client = new Dropbox.Client({key: settings.dropboxKey});
+
+        // Try to finish OAuth authorization.
+        client.authDriver(new Dropbox.AuthDriver.Cordova());
+        client.authenticate(function(error) {
+            if (error) {
+                alert('Authentication error: ' + error);
+            }
+
+            if (client.isAuthenticated()) {
+                // Client is authenticated. Display UI.
+                console.log('Authenticated');
+            }
+        });
+    };
 });
