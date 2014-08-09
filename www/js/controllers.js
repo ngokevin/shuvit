@@ -86,15 +86,12 @@ angular.module('shuvit.controllers', [])
 .controller('ToolsCtrl', function($scope) {
 })
 
-.controller('SettingsCtrl', function($scope) {
+.controller('SettingsCtrl', ['$scope', 'DropboxService', function($scope, DropboxService) {
     $scope.linkDropbox = function() {
-        var client = new Dropbox.Client({key: settings.dropboxKey});
-
-        // Try to finish OAuth authorization.
-        client.authDriver(new Dropbox.AuthDriver.Cordova());
+        var client = DropboxService.client;
         client.authenticate(function(error) {
             if (error) {
-                alert('Authentication error: ' + error);
+                console.log('Authentication error: ' + error);
             }
 
             if (client.isAuthenticated()) {
@@ -103,4 +100,4 @@ angular.module('shuvit.controllers', [])
             }
         });
     };
-});
+}]);

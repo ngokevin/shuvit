@@ -1,5 +1,6 @@
 var $ = require('jquery');
 var _ = require('underscore');
+var settings = require('./settings');
 
 angular.module('shuvit.services', [])
 
@@ -107,4 +108,20 @@ angular.module('shuvit.services', [])
     function save() {
         localStorage.setItem('sessions', serialize(sessions));
     }
+})
+
+.service('DropboxService', function() {
+    // Dropbox stuff.
+    var client = new Dropbox.Client({key: settings.dropboxKey});
+    if (window.cordova) {
+        client.authDriver(new Dropbox.AuthDriver.Cordova());
+    }
+    if (client.isAuthenticated()) {
+        // Client is authenticated. Display UI.
+       console.log('Authenticated');
+    }
+
+    return {
+        client: client
+    };
 });
