@@ -6,8 +6,11 @@
       </div>
 
       <a class="item item-icon-left" ng-click="linkDropbox()">
-        <i class="icon ion-social-dropbox-outline"></i>
-        <span>Set Up Dropbox Sync</span>
+        <i class="icon"
+           ng-class="{'ion-social-dropbox-outline': !dropboxAuthenticated,
+                      'ion-ios7-checkmark': dropboxAuthenticated}"></i>
+        <span>{{ dropboxAuthenticated && 'Connected with Dropbox' ||
+                                         'Set up Dropbox Sync'</span>
       </a>
     </div>
   </ion-content>

@@ -87,16 +87,23 @@ angular.module('shuvit.controllers', [])
 })
 
 .controller('SettingsCtrl', ['$scope', 'DropboxService', function($scope, DropboxService) {
+    var client = DropboxService.client;
+
+    $scope.dropboxAuthenticated = client.isAuthenticated();
+
     $scope.linkDropbox = function() {
-        var client = DropboxService.client;
-        client.authenticate(function(error) {
+        if (client.isAuthenticated()) {
+            return;
+        }
+
+        client.authenticate({interactive: true}, function(error) {
             if (error) {
                 console.log('Authentication error: ' + error);
             }
 
             if (client.isAuthenticated()) {
                 // Client is authenticated. Display UI.
-                console.log('Authenticated');
+                localStorage.setItem('token', client._oauth._token);
             }
         });
     };

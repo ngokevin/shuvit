@@ -12,7 +12,9 @@ require('./settings');
 angular.module('shuvit', ['ionic', 'shuvit.controllers',
                           'shuvit.filters', 'shuvit.services'])
 
-.run(['$ionicPlatform', function($ionicPlatform) {
+.run(
+    ['$ionicPlatform', '$rootScope', '$templateCache', 'DropboxService',
+    function($ionicPlatform, $rootScope, $templateCache, DropboxService) {
     $ionicPlatform.ready(function() {
         // Hide the accessory bar by default.
         if (window.cordova && window.cordova.plugins.Keyboard) {
@@ -23,11 +25,23 @@ angular.module('shuvit', ['ionic', 'shuvit.controllers',
             StatusBar.styleDefault();
         }
     });
+
+    // Try to complete OAuth flow.
+    var client = DropboxService.client;
+    client.authenticate({interactive: false}, function(error) {
+        if (error) {
+            console.log(error);
+        }
+        console.log('Dropbox authenticated: ' + client.isAuthenticated());
+    });
+
+    $templateCache.removeAll();
 }])
 
 .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
     // AngularUI Router.
     $stateProvider
+
         // Set up an abstract state for the tabs directive.
         .state('tab', {
             url: "/tab",
@@ -96,6 +110,17 @@ angular.module('shuvit', ['ionic', 'shuvit.controllers',
             }
         });
 
-    $urlRouterProvider.otherwise('/tab/tracker');
-    window.location.href = window.location.pathname + '#/tab/tracker';
+    if (window.location.hash.indexOf('access_token') !== -1 &&
+        window.location.hash.indexOf('token_type') !== -1) {
+        // Handle the oauth redirect from Dropbox. Give dropbox.js some time
+        // to consume the token to localStorage. This case only happens once
+        // right after the user links with Dropbox.
+        setTimeout(function() {
+            window.location.href = window.location.pathname + '#/tab/tracker';
+        });
+    } else {
+        $urlRouterProvider.otherwise('/tab/tracker');
+        // Default to the tracker page; page reloads mess up the history stack.
+        window.location.href = window.location.pathname + '#/tab/tracker';
+    }
 }]);

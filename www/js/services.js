@@ -113,12 +113,9 @@ angular.module('shuvit.services', [])
 .service('DropboxService', function() {
     // Dropbox stuff.
     var client = new Dropbox.Client({key: settings.dropboxKey});
+
     if (window.cordova) {
         client.authDriver(new Dropbox.AuthDriver.Cordova());
-    }
-    if (client.isAuthenticated()) {
-        // Client is authenticated. Display UI.
-       console.log('Authenticated');
     }
 
     return {
