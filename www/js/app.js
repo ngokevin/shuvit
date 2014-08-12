@@ -13,8 +13,8 @@ angular.module('shuvit', ['ionic', 'shuvit.controllers',
                           'shuvit.filters', 'shuvit.services'])
 
 .run(
-    ['$ionicPlatform', '$rootScope', '$templateCache', 'DropboxService',
-    function($ionicPlatform, $rootScope, $templateCache, DropboxService) {
+    ['$ionicPlatform', '$rootScope', 'DropboxService',
+    function($ionicPlatform, $rootScope, DropboxService) {
     $ionicPlatform.ready(function() {
         // Hide the accessory bar by default.
         if (window.cordova && window.cordova.plugins.Keyboard) {
@@ -25,17 +25,6 @@ angular.module('shuvit', ['ionic', 'shuvit.controllers',
             StatusBar.styleDefault();
         }
     });
-
-    // Try to complete OAuth flow.
-    var client = DropboxService.client;
-    client.authenticate({interactive: false}, function(error) {
-        if (error) {
-            console.log(error);
-        }
-        console.log('Dropbox authenticated: ' + client.isAuthenticated());
-    });
-
-    $templateCache.removeAll();
 }])
 
 .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {

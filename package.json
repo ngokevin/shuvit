@@ -10,6 +10,7 @@
     "cordova": "*",
     "d3": "3.4.11",
     "envify": "~1.2.1",
+    "es6-promise": "1.0.x",
     "ionic": "1.1.6",
     "gulp": "3.8.7",
     "gulp-concat": "^2.2.0",
