@@ -118,11 +118,6 @@ angular.module('shuvit.services', [])
             if (using == 'datastore') {
                 DatastoreSessionService.del(id);
             }
-        },
-        merge: function() {
-            // Merge LS and Dropbox together.
-            _.map(DatastoreSessionService.get(), LocalStorageSessionService.add);
-            _.map(LocalStorageSessionService.get(), DatastoreSessionService.add);
         }
     };
 }])
@@ -143,6 +138,11 @@ angular.module('shuvit.services', [])
         return session;
     }
 
+    function merge() {
+        // Merge LS to Dropbox.
+        _.each(LocalStorageSessionService.get(), add);
+    }
+
     function get() {
         // Refresh and return;
         sessions = _.map(sessionTable.query(), transformSession);
@@ -161,8 +161,11 @@ angular.module('shuvit.services', [])
         init: function(datastore) {
             // Open Dropbox session table.
             sessionTable = datastore.getTable('sessions');
-            SessionService.merge();
-            datastore.recordsChanged.addListener(SessionService.merge);
+            merge();
+            datastore.recordsChanged.addListener(function(session) {
+                // Refresh and merge Dropbox to LS.
+                _.each(get(), LocalStorageSessionService.add);
+            });
         },
         get: get,
         add: add,
@@ -202,9 +205,9 @@ angular.module('shuvit.services', [])
         add: function(session) {
             // Uniquify.
             var existing = _.filter(sessions, function(_session) {
-                return _session.id = session.id;
+                return _session.id == session.id;
             });
-            if (existing) {
+            if (existing.length) {
                 return;
             }
 
