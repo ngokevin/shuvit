@@ -141,6 +141,7 @@ angular.module('shuvit.services', [])
     function merge() {
         // Merge LS to Dropbox.
         _.each(LocalStorageSessionService.get(), add);
+        _.each(get(), LocalStorageSessionService.add);
     }
 
     function get() {
