@@ -9,21 +9,29 @@ var settings = require('./settings');
 angular.module('shuvit.controllers', [])
 
 .controller('TrackerCtrl', ['$scope', 'SessionService', function($scope, SessionService) {
-    $scope.sessions = SessionService.get();
+    var currentChart;
     $scope.rangeDays = 365;
 
-    var currentChart = chart.CumulativeLineChart('.chart', $scope.sessions, {
-        xAxis: {
-            days: $scope.rangeDays
-        },
-        yAxis: {
-            field: 'cumulativeProfit',
-        }
+    SessionService.promise.then(function() {
+        $scope.sessions = SessionService.get();
+
+        currentChart = chart.CumulativeLineChart('.chart', $scope.sessions, {
+            xAxis: {
+                days: $scope.rangeDays
+            },
+            yAxis: {
+                field: 'cumulativeProfit',
+            }
+        });
+
+        $scope.$apply();
     });
 
     window.onresize = _.debounce(function() {
         // Resize the chart if viewport changes.
-        currentChart.refresh($scope.sessions);
+        if (currentChart) {
+            currentChart.refresh($scope.sessions);
+        }
     }, 100);
 }])
 

@@ -5,49 +5,61 @@ var settings = require('./settings');
 
 angular.module('shuvit.services', [])
 
-.service('SessionService', ['DropboxService', function(DropboxService) {
-    // Session => {id, buyin, cash, date, notes, result, title}
+.service('SessionModel', function() {
+    /* id -- long, epoch time for creation of session
+     * buyin -- integer, how much they bought in with
+     * cash -- cash vs tournmaent, boolean
+     * date -- in milliseconds
+     * notes -- miscellaneous notes, string
+     * result -- integer, how much they came out with including buyin
+     * title -- name of session, string
+    */
+    return {
+        fields: ['id', 'buyin', 'cash', 'date', 'notes', 'result', 'title'],
+        validate: function(session) {
+            return session.date && session.buyin >= 0 && session.result >= 0;
+        }
+    };
+})
+
+.service('SessionService',
+    ['DatastoreSessionService', 'DropboxService', 'LocalStorageSessionService', 'SessionModel',
+    function(DatastoreSessionService, DropboxService, LocalStorageSessionService, SessionModel) {
+    // Wraps SessionService to accomodate both localStorage and Dropbox Datastore.
     var sessions = [];
-    if (localStorage.getItem('sessions')) {
-        sessions = deserialize(localStorage.getItem('sessions'));
-    } else {
-        save();
-    }
+    var using;
 
-    var sessionTable;
-    DropboxService.promise.then(function(datastore) {
-        // Open Dropbox session table.
-        sessionTable = datastore.getTable('sessions');
-        dropboxRefresh();
-        datastore.recordsChanged.addListener(dropboxRefresh());
-    });
-
-    function dropboxRefresh() {
-        // Refresh and merge sessions from Dropbox.
-        var dropboxSessions = sessionTable.query();
-
-        // Sort by ID (creation time).
-        _.sortBy(dropboxSessions, function(sessio) {
-            return session.date;
+    var promise = new Promise(function(resolve) {
+        DropboxService.promise.then(function(datastore) {
+            // Use Datastore.
+            DatastoreSessionService.init(datastore);
+            sessions = DatastoreSessionService.get();
+            using = 'datastore';
+            resolve();
+        }, function() {
+            // Use localStorage.
+            sessions = LocalStorageSessionService.get();
+            using = 'localstorage';
+            resolve();
         });
-    }
+    });
 
     function transform(_sessions) {
         // Attach helper data.
-        _sessions = $.extend(true, {}, _sessions);
+        _sessions = $.extend(true, {}, _sessions);  // Extend, no overwrite.
 
         var cumulativeProfit = 0;
         var index = 0;
         _sessions = _.map(_sessions, function(d) {
-            // Index.
+            // Add an index.
             d.index = index++;
 
-            // Title if it doesn't exist.
+            // Add a title for those that don't have any.
             if (!d.title) {
                 d.title = 'Session #' + (d.index + 1);
             }
 
-            // Calculate profits.
+            // Add profits.
             d.profit = d.result - d.buyin;
             cumulativeProfit += d.profit;
             d.cumulativeProfit = cumulativeProfit;
@@ -55,10 +67,107 @@ angular.module('shuvit.services', [])
         });
 
         return _.map(_sessions, function(session) {
-            // Long to date.
+            // Convert long to date.
             session.date = new Date(session.date);
             return session;
         });
+    }
+
+    return {
+        promise: promise,
+        get: function(mock) {
+            if (mock) {
+                return transform([
+                    {id: 0, date: new Date(2014, 7, 31), buyin: 50, result: 500},
+                    {id: 1, date: new Date(2014, 8, 1), buyin: 40, result: 0},
+                    {id: 2, date: new Date(2014, 8, 2), buyin: 60, result: 350}
+                ]);
+            }
+
+            if (using == 'localStorage') {
+                return transform(LocalStorageSessionService.get());
+            } else {
+                return transform(DatastoreSessionService.get());
+            }
+        },
+        add: function(session) {
+            if (!SessionModel.validate(session)) {
+                return;
+            }
+
+            // Build the object.
+            session = {
+                id: new Date().getTime(),  // ID is epoch. Helps Dropbox merge.
+                buyin: parseInt(session.buyin, 10),
+                cash: session.cash || false,
+                date: session.date,
+                notes: session.notes || '',
+                result: parseInt(session.result, 10),
+                title: session.title,
+            };
+
+            LocalStorageSessionService.add(session);
+            DatastoreSessionService.add(session);
+
+            return true;
+        },
+        del: function(id) {
+            LocalStorageSessionService.del(id);
+            DatastoreSessionService.del(id);
+        },
+    };
+}])
+
+.service('DatastoreSessionService',
+    ['DropboxService', 'SessionModel',
+    function(DropboxService, SessionModel) {
+    // Service to deserialize Datastore records to normalized JS objects.
+    var sessionTable;
+    var sessions = [];
+
+    function transformSession(sessionRecord) {
+        // Transform the Datastore record into a plain JS object.
+        var session = {};
+        _.each(SessionModel.fields, function(field) {
+            session[field] = sessionRecord.get(field);
+        });
+        return session;
+    }
+
+    function dropboxRefresh() {
+        // Refresh and merge sessions from Dropbox.
+        // Transform.
+        var sessionRecords = sessionTable.query();
+        sessions = _.map(sessionRecords, transformSession);
+    }
+
+    return {
+        init: function(datastore) {
+            // Open Dropbox session table.
+            sessionTable = datastore.getTable('sessions');
+            dropboxRefresh();
+            datastore.recordsChanged.addListener(dropboxRefresh);
+        },
+        get: function() {
+            dropboxRefresh();
+            return sessions;
+        },
+        add: function(session) {
+            sessionTable.insert(session);
+        },
+        del: function(id) {
+            sessionTable.query({id: id})[0].deleteRecord();
+        },
+    };
+}])
+
+.service('LocalStorageSessionService', function() {
+    var sessions = [];
+
+    if (localStorage.getItem('sessions')) {
+        sessions = deserialize(localStorage.getItem('sessions'));
+    } else {
+        save();
     }
 
     function serialize(_sessions) {
@@ -76,58 +185,23 @@ angular.module('shuvit.services', [])
     }
 
     return {
-        get: function(mock) {
-            if (mock) {
-                return transform([
-                    {id: 0, date: new Date(2014, 7, 31), buyin: 50, result: 500},
-                    {id: 1, date: new Date(2014, 8, 1), buyin: 40, result: 0},
-                    {id: 2, date: new Date(2014, 8, 2), buyin: 60, result: 350}
-                ]);
-            }
-            return transform(sessions);
+        get: function() {
+            return new Promise(function(resolve, reject) {
+                resolve(sessions);
+            });
         },
-
         add: function(session) {
-            /* Add a session, which consists of.
-             * buyin -- integer, how much they bought in with
-             * cash -- cash vs tournmanet, boolean
-             * date -- in milliseconds
-             * notes -- miscellaneous notes, string
-             * result -- integer, how much they came out with including buyin
-             * title -- name of session, string
-             */
-            if (!(session.date && session.buyin >= 0 && session.result >= 0)) {
-                // Validate.
-                return;
-            }
-
-            // Build the object.
-            sessions.push({
-                id: new Date().getTime(),  // ID is epoch. Helps Dropbox merge.
-                buyin: parseInt(session.buyin, 10),
-                cash: session.cash || false,
-                date: session.date,
-                notes: session.notes,
-                result: parseInt(session.result, 10),
-                title: session.title,
-            });
-
-            sessions = _.sortBy(sessions, function(_session) {
-                return _session.date;
-            });
-
+            sessions.push(session);
             save();
-            return true;
         },
-
         del: function(id) {
             sessions = _.reject(sessions, function(session) {
                 return session.id == id;
             });
             save();
-        },
+        }
     };
-}])
+})
 
 .service('DropboxService', function() {
     // Dropbox stuff.
@@ -147,7 +221,6 @@ angular.module('shuvit.services', [])
                 return;
             }
 
-            console.log('Dropbox authenticated.');
             if (client.isAuthenticated()) {
                 // Set the table.
                 var manager = client.getDatastoreManager();
@@ -158,8 +231,12 @@ angular.module('shuvit.services', [])
                         reject();
                         return;
                     }
+                    console.log('Dropbox authenticated.');
                     resolve(datastore);
                 });
+            } else {
+                console.log('Dropbox not authenticated.');
+                reject();
             }
         });
     });
