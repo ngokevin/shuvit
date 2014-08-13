@@ -94,7 +94,9 @@ angular.module('shuvit.controllers', [])
 .controller('ToolsCtrl', function($scope) {
 })
 
-.controller('SettingsCtrl', ['$scope', 'DropboxService', function($scope, DropboxService) {
+.controller('SettingsCtrl',
+    ['$ionicModal', '$scope', 'DropboxService',
+    function($ionicModal, $scope, DropboxService) {
     var client = DropboxService.client;
 
     $scope.dropboxAuthenticated = client.isAuthenticated();
@@ -114,6 +116,17 @@ angular.module('shuvit.controllers', [])
                 localStorage.setItem('token', client._oauth._token);
             }
         });
+    };
+
+    // Clear all data modal.
+    $ionicModal.fromTemplateUrl('clear-all-data-modal.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function(modal) {
+        $scope.clearAllDataModal = modal;
+    });
+    $scope.clearAllData = function() {
+        $scope.clearAllDataModal.show();
     };
 }])
 
