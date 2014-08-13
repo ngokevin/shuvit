@@ -115,4 +115,9 @@ angular.module('shuvit.controllers', [])
             }
         });
     };
+}])
+
+
+.controller('RawDataCtrl', ['$scope', function($scope) {
+    $scope.rawData = JSON.stringify(localStorage);
 }]);

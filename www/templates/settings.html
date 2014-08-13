@@ -4,13 +4,20 @@
       <div class="item item-divider">
         Accounts
       </div>
-
       <a class="item item-icon-left" ng-click="linkDropbox()">
         <i class="icon"
            ng-class="{'ion-social-dropbox-outline': !dropboxAuthenticated,
                       'ion-ios7-checkmark': dropboxAuthenticated}"></i>
         <span>{{ dropboxAuthenticated && 'Connected with Dropbox' ||
                                          'Set up Dropbox Sync' }}</span>
+      </a>
+
+      <div class="item item-divider">
+        Developer
+      </div>
+      <a class="item item-icon-left" href="#/tab/raw_data">
+        <i class="icon ion-ios7-folder-outline"></i>
+        <span>View Raw Data</span>
       </a>
     </div>
   </ion-content>

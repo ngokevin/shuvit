@@ -97,6 +97,16 @@ angular.module('shuvit', ['ionic', 'shuvit.controllers',
                     controller: 'SettingsCtrl'
                 }
             }
+        })
+
+        .state('tab.raw_data', {
+            url: '/raw_data',
+            views: {
+                'settings': {
+                    templateUrl: 'templates/raw_data.html',
+                    controller: 'RawDataCtrl'
+                }
+            }
         });
 
     if (window.location.hash.indexOf('access_token') !== -1 &&

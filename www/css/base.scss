@@ -27,3 +27,12 @@ html body {
         top: 50px;
     }
 }
+
+.raw-data {
+    .scroll, .card, textarea {
+        height: 100%;
+    }
+    .item-input {
+        height: 80%;
+    }
+}
