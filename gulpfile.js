@@ -11,8 +11,9 @@ var paths = {
     css: ['./www/css/**/*.css'],
     scss: ['./www/css/**/*.scss'],
     ionic_scss: ['./scss/**/*.scss'],
-    img: ['www/img/**/*'],
-    js: ['www/js/*.js'],
+    img: ['./www/img/**/*'],
+    js: ['./www/lib/ionic/js/ionic.bundle.js',
+         './www/js/dropbox-datastores-1.1-latest.js'],  // Extra JS.
 };
 
 gulp.task('ionic_css', function(done) {
@@ -43,11 +44,19 @@ gulp.task('css', ['ionic_css', 'scss'], function(done) {
         .end(done);
 });
 
-gulp.task('js', function() {
-    // Browserify/bundle the JS.
+gulp.task('app_js', function(done) {
+    // Browserify/bundle the main JS.
     browserify(paths.app_js)
         .bundle()
         .pipe(source('bundle.js'))
+        .pipe(gulp.dest('./www/build/'))
+        .end(done);
+});
+
+gulp.task('js', ['app_js'], function() {
+    // Tack on some other JS files to the main bundle.
+    gulp.src(paths.js.concat(['./www/build/bundle.js']))
+        .pipe(concat('bundle.js'))
         .pipe(gulp.dest('./www/build/'));
 });
 

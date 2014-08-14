@@ -77,11 +77,15 @@ angular.module('shuvit.services', [])
         promise: promise,
         get: function(mock) {
             if (mock) {
-                return transform([
-                    {id: 0, date: new Date(2014, 7, 31), buyin: 50, result: 500},
-                    {id: 1, date: new Date(2014, 8, 1), buyin: 40, result: 0},
-                    {id: 2, date: new Date(2014, 8, 2), buyin: 60, result: 350}
-                ]);
+                return transform([{
+                    id: new Date().getTime(),
+                    buyin: 100,
+                    cash: false,
+                    date: new Date(2014, 7, 31),
+                    notes: 'ngokevin.com',
+                    result: 200,
+                    title: 'ngokevin.com'
+                }]);
             }
 
             if (using == 'datastore') {

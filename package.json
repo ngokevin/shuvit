@@ -17,6 +17,8 @@
     "gulp-minify-css": "^0.3.0",
     "gulp-rename": "*",
     "jquery": "2.1.1",
+    "karma": "0.12.21",
+    "karma-browserify": "0.2.1",
     "vinyl-source-stream": "*",
     "underscore": "1.6.0"
   },
@@ -27,6 +29,14 @@
     "modernizr": "Modernizr"
   },
   "browserify": {
-    "transform": ["browserify-shim"]
+    "transform": [
+      "browserify-shim"
+    ]
+  },
+  "devDependencies": {
+    "karma-jasmine": "^0.1.5",
+    "karma-firefox-launcher": "^0.1.3",
+    "karma-chrome-launcher": "^0.1.4",
+    "karma-safari-launcher": "^0.1.1"
   }
 }
