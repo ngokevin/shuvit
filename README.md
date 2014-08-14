@@ -4,7 +4,7 @@ shuvit
 Poker tracker and pocket cruncher for live tournament poker players.
 [Details](http://ngokevin.com/blog/poker19/).
 
-Main Dependencies:
+### Dependencies
 
 - [AngularJS](http://angularjs.org) for MVC.
 - [Browserify](http://browserify.org/) for bundling and third-party
@@ -12,7 +12,13 @@ Main Dependencies:
 - [Gulp](http://gulpjs.com) for automated build tasks.
 - [Ionic](http://ionicframework.com) for hybrid mobile app framework.
 
-```npm install```
-```bower install```
-```cp www/js/settings_local.js.dist www/js/settings_local.js```
-```node_modules/.bin/gulp```
+### Setup
+
+- ```npm install```
+- ```bower install```
+- ```cp www/js/settings_local.js.dist www/js/settings_local.js```
+- ```node_modules/.bin/gulp```
+
+### Running Unit Tests
+
+- ```karma start karma.config.js```
