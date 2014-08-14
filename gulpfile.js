@@ -12,8 +12,9 @@ var paths = {
     scss: ['./www/css/**/*.scss'],
     ionic_scss: ['./scss/**/*.scss'],
     img: ['./www/img/**/*'],
-    js: ['./www/lib/ionic/js/ionic.bundle.js',
+    js: ['./www/lib/ionic/js/ionic.bundle.min.js',
          './www/js/dropbox-datastores-1.1-latest.js'],  // Extra JS.
+    watch_js: ['./www/js/*.js'],
 };
 
 gulp.task('ionic_css', function(done) {
@@ -44,18 +45,17 @@ gulp.task('css', ['ionic_css', 'scss'], function(done) {
         .end(done);
 });
 
-gulp.task('app_js', function(done) {
+gulp.task('app_js', function() {
     // Browserify/bundle the main JS.
-    browserify(paths.app_js)
+    return browserify(paths.app_js)
         .bundle()
         .pipe(source('bundle.js'))
-        .pipe(gulp.dest('./www/build/'))
-        .end(done);
+        .pipe(gulp.dest('./www/build/'));
 });
 
 gulp.task('js', ['app_js'], function() {
     // Tack on some other JS files to the main bundle.
-    gulp.src(paths.js.concat(['./www/build/bundle.js']))
+    gulp.src(['./www/build/bundle.js'].concat(paths.js))
         .pipe(concat('bundle.js'))
         .pipe(gulp.dest('./www/build/'));
 });
@@ -64,7 +64,7 @@ gulp.task('js', ['app_js'], function() {
 gulp.task('watch', function() {
     gulp.watch(paths.scss, ['css']);
     gulp.watch(paths.ionic_css, ['css']);
-    gulp.watch(paths.js, ['js']);
+    gulp.watch(paths.watch_js, ['js']);
 });
 
 // The default task (called when you run `gulp` from cli)
