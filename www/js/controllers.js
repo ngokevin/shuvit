@@ -8,13 +8,16 @@ var settings = require('./settings');
 
 angular.module('shuvit.controllers', [])
 
-.controller('TrackerCtrl', ['$scope', 'SessionService', function($scope, SessionService) {
+.controller('TrackerCtrl',
+    ['$rootScope', '$scope', 'PubSubService', 'SessionService',
+    function($rootScope, $scope, PubSubService, SessionService) {
     var currentChart;
+    $scope.sessions = [];
     $scope.rangeDays = 365;
 
-    SessionService.promise.then(function() {
-        $scope.sessions = SessionService.get();
-
+    PubSubService.subscribe('session-promise', function(sessions) {
+        // When the data is ready, render the chart.
+        $scope.sessions = sessions;
         currentChart = chart.CumulativeLineChart('.chart', $scope.sessions, {
             xAxis: {
                 days: $scope.rangeDays
@@ -23,16 +26,12 @@ angular.module('shuvit.controllers', [])
                 field: 'cumulativeProfit',
             }
         });
-
-        $scope.$apply();
     });
 
-    window.onresize = _.debounce(function() {
-        // Resize the chart if viewport changes.
-        if (currentChart) {
-            currentChart.refresh($scope.sessions);
-        }
-    }, 100);
+    function refreshChart() {
+        currentChart && currentChart.refresh($scope.sessions);
+    }
+    window.onresize = _.debounce(refreshChart, 100);
 }])
 
 .controller('SessionAddCtrl', ['$scope', '$state', 'SessionService',
@@ -95,43 +94,44 @@ angular.module('shuvit.controllers', [])
 })
 
 .controller('SettingsCtrl',
-    ['$ionicModal', '$scope', 'DropboxService',
-    function($ionicModal, $scope, DropboxService) {
-    var client = DropboxService.client;
+    ['$ionicModal', '$scope', 'DropboxService', 'PubSubService',
+    function($ionicModal, $scope, DropboxService, PubSubService) {
+    var client = DropboxService.getClient();
 
     $scope.dropboxAuthenticated = client.isAuthenticated();
+    PubSubService.subscribe('dropbox-promise', function(promise) {
+        client = DropboxService.getClient();
+        $scope.dropboxAuthenticated = client.isAuthenticated();
+        $scope.$apply();
+    });
 
     $scope.linkDropbox = function() {
         if (client.isAuthenticated()) {
             return;
         }
-
         client.authenticate({interactive: true}, function(error) {
             if (error) {
                 console.log('Authentication error: ' + error);
+                return;
             }
-
-            if (client.isAuthenticated()) {
-                // Client is authenticated. Display UI.
-                $scope.dropboxAuthenticated = true;
-                $scope.$apply();
-                localStorage.setItem('token', client._oauth._token);
-            }
+            DropboxService.refresh();
+            $scope.$apply();
         });
     };
 }])
-
 
 .controller('RawDataCtrl', ['$scope', function($scope) {
     $scope.rawData = JSON.stringify(localStorage);
 }])
 
 .controller('ClearAllDataCtrl',
-    ['$scope', '$state', 'SessionService',
-    function($scope, $state, SessionService) {
+    ['$scope', '$state', 'DropboxService', 'SessionService',
+    function($scope, $state, DropboxService, SessionService) {
     $scope.clearAllData = function() {
         localStorage.clear();
         SessionService.clear();
+        DropboxService.refresh();
+
         $state.go('tab.settings');
     };
     $scope.cancelClearAllData = function() {

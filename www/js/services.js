@@ -23,26 +23,30 @@ angular.module('shuvit.services', [])
 })
 
 .service('SessionService',
-    ['DatastoreSessionService', 'DropboxService', 'LocalStorageSessionService', 'SessionModel',
-    function(DatastoreSessionService, DropboxService, LocalStorageSessionService, SessionModel) {
+    ['DatastoreSessionService', 'DropboxService', 'LocalStorageSessionService',
+     'PubSubService', 'SessionModel',
+    function(DatastoreSessionService, DropboxService, LocalStorageSessionService,
+             PubSubService, SessionModel) {
     // Wraps SessionService to accomodate both localStorage and Dropbox Datastore.
     var sessions = [];
     var using;
 
-    var promise = new Promise(function(resolve) {
-        DropboxService.promise.then(function(datastore) {
+    PubSubService.subscribe('dropbox-promise', function(dropboxPromise) {
+        dropboxPromise.then(function(datastore) {
             // Use Datastore.
             DatastoreSessionService.init(datastore);
             sessions = DatastoreSessionService.get();
             using = 'datastore';
-            resolve();
+            PubSubService.publish('session-promise', [get()]);
         }, function() {
             // Use localStorage.
             sessions = LocalStorageSessionService.get();
             using = 'localstorage';
-            resolve();
+            PubSubService.publish('session-promise', [get()]);
         });
     });
+
+    PubSubService.publish('session-ready');
 
     function transform(_sessions) {
         // Attach helper data.
@@ -73,27 +77,28 @@ angular.module('shuvit.services', [])
         });
     }
 
-    return {
-        promise: promise,
-        get: function(mock) {
-            if (mock) {
-                return transform([{
-                    id: new Date().getTime(),
-                    buyin: 100,
-                    cash: false,
-                    date: new Date(2014, 7, 31),
-                    notes: 'ngokevin.com',
-                    result: 200,
-                    title: 'ngokevin.com'
-                }]);
-            }
+    function get(mock) {
+        if (mock) {
+            return transform([{
+                id: new Date().getTime(),
+                buyin: 100,
+                cash: false,
+                date: new Date(2014, 7, 31),
+                notes: 'ngokevin.com',
+                result: 200,
+                title: 'ngokevin.com'
+            }]);
+        }
 
-            if (using == 'datastore') {
-                return transform(DatastoreSessionService.get());
-            } else {
-                return transform(LocalStorageSessionService.get());
-            }
-        },
+        if (using == 'datastore') {
+            return transform(DatastoreSessionService.get());
+        } else {
+            return transform(LocalStorageSessionService.get());
+        }
+    }
+
+    return {
+        get: get,
         add: function(session) {
             if (!SessionModel.validate(session)) {
                 return;
@@ -125,9 +130,6 @@ angular.module('shuvit.services', [])
         },
         clear: function(id) {
             LocalStorageSessionService.clear();
-            if (using == 'datastore') {
-                DatastoreSessionService.clear();
-            }
         }
     };
 }])
@@ -201,9 +203,6 @@ angular.module('shuvit.services', [])
         del: function(id) {
             sessionTable.query({id: id})[0].deleteRecord();
         },
-        clear: function() {
-            sessions = [];
-        },
     };
 }])
 
@@ -258,46 +257,92 @@ angular.module('shuvit.services', [])
     };
 })
 
-.service('DropboxService', function() {
+.service('DropboxService', ['PubSubService', function(PubSubService) {
     // Dropbox stuff.
-    var client = new Dropbox.Client({key: settings.dropboxKey});
+    var client = createClient();
+    var promise;
 
-    if (window.cordova) {
-        client.authDriver(new Dropbox.AuthDriver.Cordova());
+    function createClient() {
+        // Creates a fresh client.
+        var client = new Dropbox.Client({key: settings.dropboxKey});
+        if (window.cordova) {
+            client.authDriver(new Dropbox.AuthDriver.Cordova());
+        }
+        return client;
     }
 
-    // Try to complete OAuth flow.
-    var promise = new Promise(function(resolve, reject) {
-        // Authenticate and open datastore.
-        client.authenticate({interactive: false}, function(error) {
-            if (error) {
-                console.log(error);
-                reject();
-                return;
-            }
+    function createPromise() {
+        // Try to complete OAuth flow.
+        return new Promise(function(resolve, reject) {
+            // Authenticate and open datastore.
+            client.authenticate({interactive: false}, function(error) {
+                if (error) {
+                    console.log(error);
+                    reject();
+                    return;
+                }
 
-            if (client.isAuthenticated()) {
-                // Set the table.
-                var manager = client.getDatastoreManager();
-                manager.openDefaultDatastore(function(error, datastore) {
-                    // openDefaultDatastore is async.
-                    if (error) {
-                        console.log(error);
-                        reject();
-                        return;
-                    }
-                    console.log('Dropbox authenticated.');
-                    resolve(datastore);
-                });
-            } else {
-                console.log('Dropbox not authenticated.');
-                reject();
-            }
+                if (client.isAuthenticated()) {
+                    // Set the table.
+                    var manager = client.getDatastoreManager();
+                    manager.openDefaultDatastore(function(error, datastore) {
+                        // openDefaultDatastore is async.
+                        if (error) {
+                            console.log(error);
+                            reject();
+                            return;
+                        }
+                        console.log('Dropbox authenticated.');
+                        resolve(datastore);
+                    });
+                } else {
+                    console.log('Dropbox not authenticated.');
+                    reject();
+                }
+            });
         });
+    }
+
+    function refresh() {
+        client = createClient();
+        PubSubService.publish('dropbox-promise', [createPromise()]);
+    }
+
+    PubSubService.subscribe('session-ready', function() {
+        PubSubService.publish('dropbox-promise', [createPromise()]);
     });
 
     return {
-        client: client,
-        promise: promise
+        getClient: function() {
+            return client;
+        },
+        refresh: refresh
+    };
+}])
+
+.service('PubSubService', function() {
+    // Inter-service communication.
+    var cache = {};
+    return {
+        publish: function(topic, args) {
+            cache[topic] && $.each(cache[topic], function() {
+                this.apply(null, args || []);
+            });
+        },
+        subscribe: function(topic, callback) {
+            if (!cache[topic]) {
+                cache[topic] = [];
+            }
+            cache[topic].push(callback);
+            return [topic, callback];
+        },
+        unsubscribe: function(handle) {
+            var t = handle[0];
+            cache[t] && $.each(cache[t], function(idx){
+                if (this == handle[1]) {
+                    cache[t].splice(idx, 1);
+                }
+            });
+        }
     };
 });

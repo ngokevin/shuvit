@@ -1,11 +1,11 @@
 var gulp = require('gulp');
 var browserify = require('browserify');
 var concat = require('gulp-concat');
+var exec = require('child_process').exec;
 var fs = require('fs');
 var minifyCss = require('gulp-minify-css');
 var rename = require('gulp-rename');
 var sass = require('gulp-sass');
-var shell = require('gulp-shell')
 var source = require('vinyl-source-stream');
 
 var paths = {
@@ -64,7 +64,7 @@ gulp.task('js', ['app_js'], function(done) {
 
 gulp.task('ios', ['css', 'js'], function() {
     if (fs.existsSync('platforms/ios')) {
-        shell(['cordova prepare ios']);
+        exec('cordova prepare ios');
     }
 });
 

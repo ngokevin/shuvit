@@ -142,6 +142,14 @@ describe('SessionService', function() {
             expect(SessionService.get().length).toEqual(0);
         });
     });
+
+    it('can clear', function() {
+        inject(function(SessionService) {
+            SessionService.add(sessionFactory());
+            SessionService.clear();
+            expect(SessionService.get().length).toEqual(0);
+        });
+    });
 });
 
 
