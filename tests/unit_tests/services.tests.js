@@ -1,55 +1,47 @@
 var $ = require('jquery');
 
-describe('SessionService', function() {
-    var store = {};
+// Localstorage mock.
+var store = {};
+function getItemMock(key) {
+    return store[key];
+}
+function setItemMock(key, value) {
+    store[key] = value;
+}
+function mockLocalStorage() {
+    Object.defineProperty(localStorage, 'getItem', {
+        value: getItemMock, writable: true
+    });
+    Object.defineProperty(localStorage, 'setItem', {
+        value: setItemMock, writable: true
+    });
+    spyOn(localStorage, 'getItem').andCallFake(getItemMock);
+    spyOn(localStorage, 'setItem').andCallFake(setItemMock);
+}
 
-    var ls = function() {
-        return JSON.parse(store.storage);
+// Creates a fake session object for testing.
+function sessionFactory(_session) {
+    var session = {
+        buyin: 100,
+        cash: false,
+        date: new Date().getTime(),
+        notes: 'ngokevin.com',
+        result: 200,
+        title: 'ngokevin.com'
     };
+    return $.extend(true, session, _session);
+}
 
+describe('SessionService', function() {
     beforeEach(function() {
         // Browserify does not allow angular-mocks set window.module.
         window.angular.mock.module('shuvit');
-
-        // LocalStorage mock.
-        function getItemMock(key) {
-            return store[key];
-        }
-        function setItemMock(key) {
-            store[key] = value;
-        }
-        Object.defineProperty(localStorage, 'getItem', {
-            value: getItemMock,
-            writable: true
-        });
-        Object.defineProperty(localStorage, 'setItem', {
-            value: setItemMock,
-            writable: true
-        });
-        spyOn(localStorage, 'getItem').andCallFake(function(key) {
-            return store[key];
-        });
-        spyOn(localStorage, 'setItem').andCallFake(function(key, value) {
-            store[key] = value;
-        });
+        mockLocalStorage();
     });
 
     afterEach(function() {
         store = {};
     });
-
-    function sessionFactory(_session) {
-        // Creates a fake session object for testing.
-        var session = {
-            buyin: 100,
-            cash: false,
-            date: new Date().getTime(),
-            notes: 'ngokevin.com',
-            result: 200,
-            title: 'ngokevin.com'
-        };
-        return $.extend(true, session, _session);
-    }
 
     it('can do a simple get', function() {
         store.sessions = JSON.stringify([sessionFactory()]);
@@ -148,6 +140,92 @@ describe('SessionService', function() {
             expect(SessionService.get().length).toEqual(1);
             SessionService.del(SessionService.get()[0].id);
             expect(SessionService.get().length).toEqual(0);
+        });
+    });
+});
+
+
+describe('DatastoreSessionService', function() {
+    var datastore;
+
+    beforeEach(function() {
+        // Browserify does not allow angular-mocks set window.module.
+        window.angular.mock.module('shuvit');
+        mockLocalStorage();
+
+        // Mock Dropbox.
+        var key = require('../../www/js/settings').dropboxKey;
+        global.Dropbox = new (require('dropbox-mock'))();
+        global.Dropbox.allowAppKey(key);
+        var client = new global.Dropbox.Client({key: key});
+        client.authenticate({interactive: false});
+        var manager = client.getDatastoreManager();
+        manager.openDefaultDatastore(function(error, _datastore) {
+            datastore = _datastore;
+        });
+        global.Dropbox.sessions = [];
+    });
+
+    afterEach(function() {
+        datastore = null;
+        global.Dropbox.sessions = [];
+        store = {};
+    });
+
+    it('can init', function() {
+        inject(function(DatastoreSessionService) {
+            DatastoreSessionService.init(datastore);
+            expect(global.Dropbox.sessions.length).toEqual(0);
+        });
+    });
+
+    it('can init merge localStorage to datastore', function() {
+        var session = sessionFactory();
+        store.sessions = JSON.stringify([session]);
+        inject(function(DatastoreSessionService) {
+            DatastoreSessionService.init(datastore);
+            expect(global.Dropbox.sessions.length).toEqual(1);
+            expect(global.Dropbox.sessions[0].date).toEqual(session.date);
+        });
+    });
+
+    it('can init merge datastore to localStorage', function() {
+        var session = sessionFactory();
+        global.Dropbox.sessions = [session];  // Initial SessionTable from DB.
+        inject(function(DatastoreSessionService) {
+            DatastoreSessionService.init(datastore);
+            expect(JSON.parse(store.sessions).length).toEqual(1);
+            expect(JSON.parse(store.sessions)[0].date).toEqual(session.date);
+        });
+    });
+
+    it('can init merge datastore and localStorage together', function() {
+        // Init datastore.
+        var session_A = sessionFactory();
+        session_A.id = 123;
+        global.Dropbox.sessions = [session_A];
+
+        // Init localStorage.
+        var session_B = sessionFactory();
+        session_B.id = 456;
+        store.sessions = JSON.stringify([session_B]);
+
+        inject(function(DatastoreSessionService) {
+            DatastoreSessionService.init(datastore);
+
+            // Check datastore.
+            expect(global.Dropbox.sessions.length).toEqual(2);
+            expect(global.Dropbox.sessions[0].id).toEqual(123);
+            // TODO: upgrade dropbox-mock.js so we can set our own IDs.
+            // expect(global.Dropbox.sessions[1].id).toEqual(456);
+            expect(global.Dropbox.sessions[1].id).toEqual('1');
+
+            // Check localStorage.
+            expect(JSON.parse(store.sessions).length).toEqual(2);
+            // TODO: upgrade dropbox-mock.js so we can set our own IDs.
+            // expect(JSON.parse(store.sessions)[0].id).toEqual(456);
+            expect(JSON.parse(store.sessions)[0].id).toEqual('1');
+            expect(JSON.parse(store.sessions)[1].id).toEqual(123);
         });
     });
 });

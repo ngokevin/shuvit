@@ -9,6 +9,7 @@
     "browserify-shim": "3.6.0",
     "cordova": "*",
     "d3": "3.4.11",
+    "dropbox-mock": "0.0.x",
     "envify": "~1.2.1",
     "es6-promise": "1.0.x",
     "ionic": "1.1.6",
