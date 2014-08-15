@@ -13,6 +13,7 @@
     "envify": "~1.2.1",
     "es6-promise": "1.0.x",
     "ionic": "1.1.6",
+    "ios-sim": "*",
     "gulp": "3.8.7",
     "gulp-concat": "^2.2.0",
     "gulp-minify-css": "^0.3.0",

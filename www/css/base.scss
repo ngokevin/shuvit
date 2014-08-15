@@ -36,3 +36,13 @@ html body {
         height: 80%;
     }
 }
+
+.clear-all-data {
+    text-align: center;
+
+    .ion-ios7-trash-outline {
+        display: block;
+        font-size: 80px;
+        text-align: center;
+    }
+}

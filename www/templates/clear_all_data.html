@@ -1,0 +1,19 @@
+<ion-view title="Clear All Data">
+  <ion-content class="padding clear-all-data">
+    <h4>Are you sure?</h4>
+
+    <i class="icon ion-ios7-trash-outline"></i>
+
+    <h4>This will clear ALL local data including any sessions, notes, and links
+        to your Dropbox.</h4>
+
+    <p>Any data synced to Dropbox will NOT be affected.</p>
+
+    <a class="button button-block button-assertive" ng-click="clearAllData()">
+      Clear All Data
+    </a>
+    <a class="button button-block button-cancel" ng-click="cancelClearAllData()">
+      No, Take Me Back
+    </a>
+  </ion-content>
+</ion-modal-view>

@@ -19,23 +19,10 @@
         <i class="icon ion-ios7-folder-outline"></i>
         <span>View Raw Data</span>
       </a>
-      <a class="item item-icon-left" ng-click="clearAllData()">
+      <a class="item item-icon-left" href="#/tab/clear_all_data">
         <i class="icon ion-ios7-trash-outline"></i>
         <span>Clear All Data</span>
       </a>
     </div>
   </ion-content>
 </ion-view>
-
-<script id="clear-all-data-modal.html" type="text/ng-template">
-  <ion-modal-view>
-    <ion-header-bar>
-      <h1 class="title">Clear All Data</h1>
-    </ion-header-bar>
-    <ion-content class="padding">
-      Are you sure? This will clear ALL local data including sessions, notes, and Dropbox sync.
-
-      Data synced to Dropbox will not be affected.
-    </ion-content>
-  </ion-modal-view>
-</script>

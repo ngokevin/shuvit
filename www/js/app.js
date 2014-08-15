@@ -107,6 +107,16 @@ angular.module('shuvit', ['ionic', 'shuvit.controllers',
                     controller: 'RawDataCtrl'
                 }
             }
+        })
+
+        .state('tab.clear_all_data', {
+            url: '/clear_all_data',
+            views: {
+                'settings': {
+                    templateUrl: 'templates/clear_all_data.html',
+                    controller: 'ClearAllDataCtrl'
+                }
+            }
         });
 
     if (window.location.hash.indexOf('access_token') !== -1 &&

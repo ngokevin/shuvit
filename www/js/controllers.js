@@ -113,24 +113,25 @@ angular.module('shuvit.controllers', [])
 
             if (client.isAuthenticated()) {
                 // Client is authenticated. Display UI.
+                $scope.dropboxAuthenticated = true;
+                $scope.$apply();
                 localStorage.setItem('token', client._oauth._token);
             }
         });
-    };
-
-    // Clear all data modal.
-    $ionicModal.fromTemplateUrl('clear-all-data-modal.html', {
-        scope: $scope,
-        animation: 'slide-in-up'
-    }).then(function(modal) {
-        $scope.clearAllDataModal = modal;
-    });
-    $scope.clearAllData = function() {
-        $scope.clearAllDataModal.show();
     };
 }])
 
 
 .controller('RawDataCtrl', ['$scope', function($scope) {
     $scope.rawData = JSON.stringify(localStorage);
+}])
+
+.controller('ClearAllDataCtrl', ['$scope', '$state', function($scope, $state) {
+    $scope.clearAllData = function() {
+        localStorage.clear();
+        $state.go('tab.settings');
+    };
+    $scope.cancelClearAllData = function() {
+        $state.go('tab.settings');
+    };
 }]);
