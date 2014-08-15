@@ -126,9 +126,12 @@ angular.module('shuvit.controllers', [])
     $scope.rawData = JSON.stringify(localStorage);
 }])
 
-.controller('ClearAllDataCtrl', ['$scope', '$state', function($scope, $state) {
+.controller('ClearAllDataCtrl',
+    ['$scope', '$state', 'SessionService',
+    function($scope, $state, SessionService) {
     $scope.clearAllData = function() {
         localStorage.clear();
+        SessionService.clear();
         $state.go('tab.settings');
     };
     $scope.cancelClearAllData = function() {

@@ -1,9 +1,11 @@
 var gulp = require('gulp');
 var browserify = require('browserify');
 var concat = require('gulp-concat');
+var fs = require('fs');
 var minifyCss = require('gulp-minify-css');
 var rename = require('gulp-rename');
 var sass = require('gulp-sass');
+var shell = require('gulp-shell')
 var source = require('vinyl-source-stream');
 
 var paths = {
@@ -53,19 +55,25 @@ gulp.task('app_js', function() {
         .pipe(gulp.dest('./www/build/'));
 });
 
-gulp.task('js', ['app_js'], function() {
+gulp.task('js', ['app_js'], function(done) {
     // Tack on some other JS files to the main bundle.
-    gulp.src(['./www/build/bundle.js'].concat(paths.js))
+    return gulp.src(['./www/build/bundle.js'].concat(paths.js))
         .pipe(concat('bundle.js'))
         .pipe(gulp.dest('./www/build/'));
+});
+
+gulp.task('ios', ['css', 'js'], function() {
+    if (fs.existsSync('platforms/ios')) {
+        shell(['cordova prepare ios']);
+    }
 });
 
 // Rerun the task when a file changes
 gulp.task('watch', function() {
     gulp.watch(paths.scss, ['css']);
     gulp.watch(paths.ionic_css, ['css']);
-    gulp.watch(paths.watch_js, ['js']);
+    gulp.watch(paths.watch_js, ['js', 'ios']);
 });
 
 // The default task (called when you run `gulp` from cli)
-gulp.task('default', ['watch', 'css', 'js']);
+gulp.task('default', ['watch', 'css', 'js', 'ios']);

@@ -123,6 +123,12 @@ angular.module('shuvit.services', [])
                 DatastoreSessionService.del(id);
             }
         },
+        clear: function(id) {
+            LocalStorageSessionService.clear();
+            if (using == 'datastore') {
+                DatastoreSessionService.clear();
+            }
+        }
     };
 }])
 
@@ -195,6 +201,9 @@ angular.module('shuvit.services', [])
         del: function(id) {
             sessionTable.query({id: id})[0].deleteRecord();
         },
+        clear: function() {
+            sessions = [];
+        },
     };
 }])
 
@@ -242,6 +251,9 @@ angular.module('shuvit.services', [])
                 return session.id == id;
             });
             save();
+        },
+        clear: function() {
+            sessions = [];
         }
     };
 })
