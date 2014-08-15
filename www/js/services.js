@@ -122,7 +122,7 @@ angular.module('shuvit.services', [])
             if (using == 'datastore') {
                 DatastoreSessionService.del(id);
             }
-        }
+        },
     };
 }])
 
@@ -162,15 +162,33 @@ angular.module('shuvit.services', [])
         sessionTable.insert(session);
     }
 
+    function syncDatastoreToLocalStorage() {
+        function getSessionId(session) {
+            return session.id;
+        }
+
+        var datastoreSessions = get();
+        var localStorageSessions = LocalStorageSessionService.get();
+
+        var datastoreIds = _.map(datastoreSessions, getSessionId);
+        var localStorageIds = _.map(localStorageSessions, getSessionId);
+
+        // Sync added records from Dropbox to LS.
+        _.each(datastoreSessions, LocalStorageSessionService.add);
+
+        // Sync deleted records from Dropbox to LS.
+        var deletedRemotelyIds = _.difference(localStorageIds, datastoreIds);
+        _.each(deletedRemotelyIds, function(id) {
+            LocalStorageSessionService.del(id);
+        });
+    }
+
     return {
         init: function(datastore) {
             // Open Dropbox session table.
             sessionTable = datastore.getTable('sessions');
             merge();
-            datastore.recordsChanged.addListener(function(session) {
-                // Refresh and merge Dropbox to LS.
-                _.each(get(), LocalStorageSessionService.add);
-            });
+            datastore.recordsChanged.addListener(syncDatastoreToLocalStorage);
         },
         get: get,
         add: add,

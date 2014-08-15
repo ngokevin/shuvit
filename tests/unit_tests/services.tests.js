@@ -43,7 +43,7 @@ describe('SessionService', function() {
         store = {};
     });
 
-    it('can do a simple get', function() {
+    it('can get', function() {
         store.sessions = JSON.stringify([sessionFactory()]);
         inject(function(SessionService) {
             expect(SessionService.get()[0].notes).toEqual('ngokevin.com');
@@ -98,7 +98,7 @@ describe('SessionService', function() {
         });
     });
 
-    it('can do a simple add', function() {
+    it('can add', function() {
         inject(function(SessionService) {
             var session = sessionFactory();
             SessionService.add(session);
@@ -134,7 +134,7 @@ describe('SessionService', function() {
         });
     });
 
-    it('can do a simple delete', function() {
+    it('can delete', function() {
         inject(function(SessionService) {
             SessionService.add(sessionFactory());
             expect(SessionService.get().length).toEqual(1);
@@ -179,7 +179,17 @@ describe('DatastoreSessionService', function() {
         });
     });
 
-    it('can init merge localStorage to datastore', function() {
+    it('can get', function() {
+        var session = sessionFactory();
+        global.Dropbox.sessions = [session];
+        inject(function(DatastoreSessionService) {
+            DatastoreSessionService.init(datastore);
+            var retrievedSession = DatastoreSessionService.get()[0];
+            expect(retrievedSession.date).toEqual(session.date);
+        });
+    });
+
+    it('can merge localStorage to datastore on init', function() {
         var session = sessionFactory();
         store.sessions = JSON.stringify([session]);
         inject(function(DatastoreSessionService) {
@@ -189,7 +199,7 @@ describe('DatastoreSessionService', function() {
         });
     });
 
-    it('can init merge datastore to localStorage', function() {
+    it('can merge datastore to localStorage on init', function() {
         var session = sessionFactory();
         global.Dropbox.sessions = [session];  // Initial SessionTable from DB.
         inject(function(DatastoreSessionService) {
@@ -199,7 +209,7 @@ describe('DatastoreSessionService', function() {
         });
     });
 
-    it('can init merge datastore and localStorage together', function() {
+    it('can merge datastore and localStorage on init', function() {
         // Init datastore.
         var session_A = sessionFactory();
         session_A.id = 123;
@@ -226,6 +236,74 @@ describe('DatastoreSessionService', function() {
             // expect(JSON.parse(store.sessions)[0].id).toEqual(456);
             expect(JSON.parse(store.sessions)[0].id).toEqual('1');
             expect(JSON.parse(store.sessions)[1].id).toEqual(123);
+        });
+    });
+
+    it('can add', function() {
+        var session = sessionFactory();
+        inject(function(DatastoreSessionService) {
+            DatastoreSessionService.init(datastore);
+            DatastoreSessionService.add(session);
+            expect(global.Dropbox.sessions[0].date).toEqual(session.date);
+
+            // Check adding to ds adds to ls.
+            global.Dropbox.triggerRecordsChanged();  // Mock trigger.
+            expect(JSON.parse(store.sessions)[0].date).toEqual(session.date);
+        });
+    });
+
+    it('can add while ignoring duplicates', function() {
+        var session = sessionFactory();
+        inject(function(DatastoreSessionService) {
+            DatastoreSessionService.init(datastore);
+            DatastoreSessionService.add(session);
+            DatastoreSessionService.add(session);
+            expect(global.Dropbox.sessions.length).toEqual(1);
+
+            // Check ds adding to ls also ignores duplicates.
+            global.Dropbox.triggerRecordsChanged();
+            expect(JSON.parse(store.sessions).length).toEqual(1);
+        });
+    });
+
+    it('can delete', function() {
+        var session = sessionFactory();
+        inject(function(DatastoreSessionService) {
+            DatastoreSessionService.init(datastore);
+            DatastoreSessionService.add(session);
+            global.Dropbox.triggerRecordsChanged();
+            expect(global.Dropbox.sessions.length).toEqual(1);
+            expect(JSON.parse(store.sessions).length).toEqual(1);
+
+            DatastoreSessionService.del(DatastoreSessionService.get()[0].id);
+            expect(global.Dropbox.sessions.length).toEqual(0);
+
+            // Check deleting from ds deletes from ls.
+            global.Dropbox.triggerRecordsChanged();
+            expect(JSON.parse(store.sessions).length).toEqual(0);
+        });
+    });
+
+    it('can sync both add and delete on triggerRecordsChange to ls', function() {
+        var session_A = sessionFactory({id: 1, notes: 'A'});
+        var session_B = sessionFactory({id: 2, notes: 'B'});
+        var session_C = sessionFactory({id: 3, notes: 'C'});
+
+        // We will remove A and add C.
+        // Leaving localStorage with B and C.
+        global.Dropbox.sessions = [session_A];
+        store.sessions = JSON.stringify([session_B]);
+
+        inject(function(DatastoreSessionService) {
+            DatastoreSessionService.init(datastore);
+            global.Dropbox.triggerRecordsChanged();
+            expect(JSON.parse(store.sessions)[0].notes).toEqual('B');
+            expect(JSON.parse(store.sessions)[1].notes).toEqual('A');
+
+            global.Dropbox.sessions = [session_B, session_C];
+            global.Dropbox.triggerRecordsChanged();
+            expect(JSON.parse(store.sessions)[0].notes).toEqual('B');
+            expect(JSON.parse(store.sessions)[1].notes).toEqual('C');
         });
     });
 });
