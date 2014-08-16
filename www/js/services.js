@@ -310,6 +310,7 @@ angular.module('shuvit.services', [])
 
     PubSubService.subscribe('session-ready', function() {
         PubSubService.publish('dropbox-promise', [createPromise()]);
+        $(document).trigger('dropbox-promise');
     });
 
     return {

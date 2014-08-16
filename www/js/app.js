@@ -13,8 +13,8 @@ angular.module('shuvit', ['ionic', 'shuvit.controllers',
                           'shuvit.filters', 'shuvit.services'])
 
 .run(
-    ['$ionicPlatform', '$rootScope', 'DropboxService',
-    function($ionicPlatform, $rootScope, DropboxService) {
+    ['$ionicPlatform', '$rootScope', 'DropboxService', 'SessionService',
+    function($ionicPlatform, $rootScope, DropboxService, SessionService) {
     $ionicPlatform.ready(function() {
         // Hide the accessory bar by default.
         if (window.cordova && window.cordova.plugins.Keyboard) {
@@ -27,7 +27,9 @@ angular.module('shuvit', ['ionic', 'shuvit.controllers',
     });
 }])
 
-.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+.config(
+    ['$stateProvider', '$urlRouterProvider',
+     function($stateProvider, $urlRouterProvider) {
     // AngularUI Router.
     $stateProvider
 
@@ -124,7 +126,7 @@ angular.module('shuvit', ['ionic', 'shuvit.controllers',
         // Handle the oauth redirect from Dropbox. Give dropbox.js some time
         // to consume the token to localStorage. This case only happens once
         // right after the user links with Dropbox.
-        setTimeout(function() {
+        $(document).on('dropbox-promise', function() {
             window.location.href = window.location.pathname + '#/tab/tracker';
         });
     } else {

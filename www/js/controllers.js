@@ -15,21 +15,24 @@ angular.module('shuvit.controllers', [])
     $scope.sessions = [];
     $scope.rangeDays = 365;
 
+    var currentChart = chart.CumulativeLineChart('.chart', $scope.sessions, {
+        xAxis: {
+            days: $scope.rangeDays
+        },
+        yAxis: {
+            field: 'cumulativeProfit',
+        }
+    });
+    refreshChart();
+
     PubSubService.subscribe('session-promise', function(sessions) {
         // When the data is ready, render the chart.
         $scope.sessions = sessions;
-        currentChart = chart.CumulativeLineChart('.chart', $scope.sessions, {
-            xAxis: {
-                days: $scope.rangeDays
-            },
-            yAxis: {
-                field: 'cumulativeProfit',
-            }
-        });
+        refreshChart();
     });
 
     function refreshChart() {
-        currentChart && currentChart.refresh($scope.sessions);
+        currentChart.refresh($scope.sessions);
     }
     window.onresize = _.debounce(refreshChart, 100);
 }])
