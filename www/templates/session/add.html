@@ -1,4 +1,4 @@
-<ion-view title="Add Session">
+<ion-view title="{{ update && 'Update Session' || 'Add Session' }}">
   <ion-content class="padding">
     <div class="list">
       <label class="item item-input pickadate-wrapper" ng-show"!dateSupport">
@@ -43,8 +43,9 @@
         ng-class="{'button-stable': !session.valid,
                    'button-balanced': session.valid}"
         ng-disabled="!session.valid"
-        ng-click="addSession()">
-      <i class="icon ion-checkmark-round"></i> Add Session
+        ng-click="saveSession()">
+      <i class="icon ion-checkmark-round"></i>
+      {{ update && 'Update Session' || 'Add Session' }}
     </button>
   </ion-content>
 </ion-view>

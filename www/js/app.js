@@ -71,8 +71,18 @@ angular.module('shuvit', ['ionic', 'shuvit.controllers',
             }
         })
 
+        .state('tab.session_update', {
+            url: '/session/update/{sessionId:[0-9]+}',
+            views: {
+                'tracker': {
+                    templateUrl: 'templates/session/add.html',
+                    controller: 'SessionUpdateCtrl'
+                }
+            }
+        })
+
         .state('tab.session_detail', {
-            url: '^/tab/session/{sessionId:[0-9]+}',
+            url: '/session/{sessionId:[0-9]+}',
             views: {
                 'tracker': {
                     templateUrl: 'templates/session/detail.html',

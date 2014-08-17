@@ -6,6 +6,42 @@ require('./picker');
 require('./picker.date');
 var settings = require('./settings');
 
+function BaseSessionAddCtrl($scope, $state, SessionService) {
+    /* Base controller for add and update session views. */
+    $scope.session = {
+        date: null,
+        buyin: null,
+        cash: null,
+        notes: null,
+        result: null,
+        title: null
+    };
+
+    // Set up date picker.
+    var picker = $('.datepicker').pickadate({
+        'onSet': function(value) {
+            $scope.session.date = value.select;
+            $scope.$$phase || $scope.$apply();
+        }
+    });
+    picker.pickadate('picker').set('select', new Date().valueOf());
+    $scope.picker = picker;
+
+    // Check form validity.
+    $scope.$watch('[session.date, session.buyin, session.result]', function() {
+        $scope.session.valid = $scope.session.date &&
+                               ($scope.session.buyin || $scope.session.buyin === 0)  &&
+                               ($scope.session.result || $scope.session.result === 0);
+    }, true);
+
+    // Add session using service.
+    $scope.saveSession = function() {
+        if (SessionService.add($scope.session)) {
+            $state.go('tab.tracker');
+        }
+    };
+}
+
 angular.module('shuvit.controllers', [])
 
 .controller('TrackerCtrl',
@@ -34,47 +70,58 @@ angular.module('shuvit.controllers', [])
 
 .controller('SessionAddCtrl', ['$scope', '$state', 'SessionService',
     function($scope, $state, SessionService) {
+    BaseSessionAddCtrl.call(this, $scope, $state, SessionService);
+}])
+
+.controller('SessionUpdateCtrl',
+    ['$scope', '$state', '$stateParams', 'SessionService',
+    function($scope, $state, $stateParams, SessionService) {
+    // Inherits from SessionAddCtrl.
+    BaseSessionAddCtrl.call(this, $scope, $state, SessionService);
+
+    // Fetch session.
+    var sessions = SessionService.get();
+    var session = _.filter(sessions, function(session) {
+        return session.id == $stateParams.sessionId;
+    })[0];
+
+    // Set values in the template.
     $scope.session = {
-        date: null,
-        buyin: null,
-        cash: null,
-        notes: null,
-        result: null,
-        title: null
+        id: session.id,  // Needed for update since we do a delete + add.
+        date: session.date,
+        buyin: session.buyin,
+        cash: session.cash,
+        notes: session.notes,
+        result: session.result,
+        title: session.title
     };
 
-    // Set up date picker.
-    var picker = $('.datepicker').pickadate({
-        'onSet': function(value) {
-            $scope.session.date = value.select;
-            $scope.$$phase || $scope.$apply();
-        }
-    });
-    picker.pickadate('picker').set('select', new Date().valueOf());
+    // Set the picker date.
+    $scope.picker.pickadate('picker').set('select', session.date);
 
-    // Check form validity.
-    $scope.$watch('[session.date, session.buyin, session.result]', function() {
-        $scope.session.valid = $scope.session.date &&
-                               ($scope.session.buyin || $scope.session.buyin === 0)  &&
-                               ($scope.session.result || $scope.session.result === 0);
-    }, true);
+    // Flag that we're on the update view since we share add.html template.
+    $scope.update = true;
 
-    // Add session using service.
-    $scope.addSession = function() {
-        if (SessionService.add($scope.session)) {
-            $state.go('tab.tracker');
+    // Update session using service.
+    $scope.saveSession = function() {
+        if (SessionService.update($scope.session)) {
+            $state.go('tab.session_list');
         }
     };
 }])
 
-.controller('SessionListCtrl', ['$scope', 'SessionService',
-    function($scope, SessionService) {
+.controller('SessionListCtrl', ['$scope', '$state', 'SessionService',
+    function($scope, $state, SessionService) {
     $scope.sessions = SessionService.get();
 
     $scope.deleteSession = function(i) {
         var id = $scope.sessions[i].id;
         SessionService.del(id);
         $scope.sessions = SessionService.get();
+    };
+
+    $scope.updateSession = function(i) {
+        $state.go('tab.session_update', {sessionId: $scope.sessions[i].id});
     };
 }])
 

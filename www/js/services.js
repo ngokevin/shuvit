@@ -97,36 +97,46 @@ angular.module('shuvit.services', [])
         }
     }
 
+    function add(session) {
+        if (!SessionModel.validate(session)) {
+                return;
+        }
+
+        // Build the object.
+        session = {
+            // ID is epoch. Helps Dropbox merge.
+            id: session.id || new Date().getTime(),
+            buyin: parseInt(session.buyin, 10),
+            cash: session.cash || false,
+            date: session.date,
+            notes: session.notes || '',
+            result: parseInt(session.result, 10),
+            title: session.title || '',
+        };
+
+        LocalStorageSessionService.add(session);
+        if (using == 'datastore') {
+            DatastoreSessionService.add(session);
+        }
+
+        return true;
+    }
+
+    function del(id) {
+        LocalStorageSessionService.del(id);
+        if (using == 'datastore') {
+            DatastoreSessionService.del(id);
+        }
+    }
+
     return {
         get: get,
-        add: function(session) {
-            if (!SessionModel.validate(session)) {
-                return;
-            }
-
-            // Build the object.
-            session = {
-                id: new Date().getTime(),  // ID is epoch. Helps Dropbox merge.
-                buyin: parseInt(session.buyin, 10),
-                cash: session.cash || false,
-                date: session.date,
-                notes: session.notes || '',
-                result: parseInt(session.result, 10),
-                title: session.title || '',
-            };
-
-            LocalStorageSessionService.add(session);
-            if (using == 'datastore') {
-                DatastoreSessionService.add(session);
-            }
-
-            return true;
-        },
-        del: function(id) {
-            LocalStorageSessionService.del(id);
-            if (using == 'datastore') {
-                DatastoreSessionService.del(id);
-            }
+        add: add,
+        del: del,
+        update: function(session) {
+            // Update just removes the session and re-adds.
+            del(session.id);
+            add(session);
         },
         clear: function(id) {
             LocalStorageSessionService.clear();
