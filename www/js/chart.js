@@ -6,7 +6,7 @@ var _ = require('underscore');
 function CumulativeLineChart(element, rawData, _cfg) {
     var data;
     var height;
-    var margin = {top: 10, right: 10, bottom: 40, left: 30};
+    var margin = {top: 10, right: 10, bottom: 40, left: 40};
     var width;
 
     var cfg = {

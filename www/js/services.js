@@ -112,7 +112,7 @@ angular.module('shuvit.services', [])
                 date: session.date,
                 notes: session.notes || '',
                 result: parseInt(session.result, 10),
-                title: session.title,
+                title: session.title || '',
             };
 
             LocalStorageSessionService.add(session);

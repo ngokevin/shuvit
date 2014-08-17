@@ -11,29 +11,24 @@ angular.module('shuvit.controllers', [])
 .controller('TrackerCtrl',
     ['$rootScope', '$scope', 'PubSubService', 'SessionService',
     function($rootScope, $scope, PubSubService, SessionService) {
-    var currentChart;
-    $scope.sessions = [];
-    $scope.rangeDays = 365;
-
-    var currentChart = chart.CumulativeLineChart('.chart', $scope.sessions, {
+    var currentChart = chart.CumulativeLineChart('.chart', SessionService.get(), {
         xAxis: {
-            days: $scope.rangeDays
+            days: 365
         },
         yAxis: {
             field: 'cumulativeProfit',
         }
     });
-    refreshChart();
 
     PubSubService.subscribe('session-promise', function(sessions) {
         // When the data is ready, render the chart.
-        $scope.sessions = sessions;
         refreshChart();
     });
 
     function refreshChart() {
-        currentChart.refresh($scope.sessions);
+        currentChart.refresh(SessionService.get());
     }
+
     window.onresize = _.debounce(refreshChart, 100);
 }])
 
@@ -79,7 +74,7 @@ angular.module('shuvit.controllers', [])
     $scope.deleteSession = function(i) {
         var id = $scope.sessions[i].id;
         SessionService.del(id);
-        $scope.sessions.splice(i, 1);
+        $scope.sessions = SessionService.get();
     };
 }])
 
