@@ -136,7 +136,7 @@ angular.module('shuvit.services', [])
         update: function(session) {
             // Update just removes the session and re-adds.
             del(session.id);
-            add(session);
+            return add(session);
         },
         clear: function(id) {
             LocalStorageSessionService.clear();

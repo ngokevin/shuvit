@@ -143,6 +143,32 @@ describe('SessionService', function() {
         });
     });
 
+    it('can update', function() {
+        var session = sessionFactory();
+        session.id = 12345;
+
+        inject(function(SessionService) {
+            SessionService.add(sessionFactory());
+            expect(SessionService.get().length).toEqual(1);
+
+            // Modify data.
+            session.buyin = 500;
+            session.notes = 'Updated!';
+            session.result = 500;
+
+            // Check we removed a session and re-added it.
+            SessionService.update(session);
+            expect(SessionService.get().length).toEqual(1);
+
+            // Check fields are expected after update.
+            var new_session = SessionService.get()[0];
+            expect(new_session.id).toEqual(12345);
+            expect(new_session.notes).toEqual('Updated!');
+            expect(new_session.buyin).toEqual(500);
+            expect(new_session.result).toEqual(500);
+        });
+    });
+
     it('can clear', function() {
         inject(function(SessionService) {
             SessionService.add(sessionFactory());
