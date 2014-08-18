@@ -6,7 +6,7 @@ require('./picker');
 require('./picker.date');
 var settings = require('./settings');
 
-function BaseSessionAddCtrl($scope, $state, SessionService) {
+function BaseSessionAddCtrl($rootScope, $scope, $state, SessionService) {
     /* Base controller for add and update session views. */
     $scope.session = {
         date: null,
@@ -22,9 +22,17 @@ function BaseSessionAddCtrl($scope, $state, SessionService) {
         'onSet': function(value) {
             $scope.session.date = value.select;
             $scope.$$phase || $scope.$apply();
+
+            if (!$scope.update) {
+                // Don't want to set this when we're just updating.
+                $rootScope.lastPickedDate = value.select;
+            }
         }
     });
-    picker.pickadate('picker').set('select', new Date().valueOf());
+    var initialDate = $scope.update ? new Date().valueOf() :
+                                      $rootScope.lastPickedDate ||
+                                      new Date().valueOf();
+    picker.pickadate('picker').set('select', initialDate);
     $scope.picker = picker;
 
     // Check form validity.
@@ -68,16 +76,20 @@ angular.module('shuvit.controllers', [])
     window.onresize = _.debounce(refreshChart, 100);
 }])
 
-.controller('SessionAddCtrl', ['$scope', '$state', 'SessionService',
-    function($scope, $state, SessionService) {
-    BaseSessionAddCtrl.call(this, $scope, $state, SessionService);
+.controller('SessionAddCtrl',
+    ['$rootScope', '$scope', '$state', 'SessionService',
+    function($rootScope, $scope, $state, SessionService) {
+    $scope.update = false;
+
+    BaseSessionAddCtrl.call(this, $rootScope, $scope, $state, SessionService);
 }])
 
 .controller('SessionUpdateCtrl',
-    ['$scope', '$state', '$stateParams', 'SessionService',
-    function($scope, $state, $stateParams, SessionService) {
-    // Inherits from SessionAddCtrl.
-    BaseSessionAddCtrl.call(this, $scope, $state, SessionService);
+    ['$rootScope', '$scope', '$state', '$stateParams', 'SessionService',
+    function($rootScope, $scope, $state, $stateParams, SessionService) {
+    $scope.update = true; // Flag that we're on the update view
+
+    BaseSessionAddCtrl.call(this, $rootScope, $scope, $state, SessionService);
 
     // Fetch session.
     var sessions = SessionService.get();
@@ -99,8 +111,6 @@ angular.module('shuvit.controllers', [])
     // Set the picker date.
     $scope.picker.pickadate('picker').set('select', session.date);
 
-    // Flag that we're on the update view since we share add.html template.
-    $scope.update = true;
 
     // Update session using service.
     $scope.saveSession = function() {
