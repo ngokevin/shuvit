@@ -148,7 +148,7 @@ describe('SessionService', function() {
         session.id = 12345;
 
         inject(function(SessionService) {
-            SessionService.add(sessionFactory());
+            SessionService.add(session);
             expect(SessionService.get().length).toEqual(1);
 
             // Modify data.
@@ -260,15 +260,11 @@ describe('DatastoreSessionService', function() {
             // Check datastore.
             expect(global.Dropbox.sessions.length).toEqual(2);
             expect(global.Dropbox.sessions[0].id).toEqual(123);
-            // TODO: upgrade dropbox-mock.js so we can set our own IDs.
-            // expect(global.Dropbox.sessions[1].id).toEqual(456);
-            expect(global.Dropbox.sessions[1].id).toEqual('1');
+            expect(global.Dropbox.sessions[1].id).toEqual(456);
 
             // Check localStorage.
             expect(JSON.parse(store.sessions).length).toEqual(2);
-            // TODO: upgrade dropbox-mock.js so we can set our own IDs.
-            // expect(JSON.parse(store.sessions)[0].id).toEqual(456);
-            expect(JSON.parse(store.sessions)[0].id).toEqual('1');
+            expect(JSON.parse(store.sessions)[0].id).toEqual(456);
             expect(JSON.parse(store.sessions)[1].id).toEqual(123);
         });
     });
