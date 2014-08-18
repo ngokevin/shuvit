@@ -1,0 +1,41 @@
+<ion-view title="Pushbot" class="pushbot">
+  <ion-content>
+    <div class="list">
+      <!-- M-ratio. -->
+      <div class="item item-divider">
+        M-ratio <span class="divider-value" ng-show="m">M={{ m }}</span>
+      </div>
+      <label class="item item-input">
+        <span class="input-label">Stack Size ($)</span>
+        <input type="tel" pattern="\d*" placeholder="20000"
+               ng-model="pushbot.stack"></input>
+      </label>
+      <label class="item item-input">
+        <span class="input-label">Big Blind ($)</span>
+        <input type="tel" pattern="\d*" placeholder="4000"
+               ng-model="pushbot.bb"></input>
+      </label>
+      <label class="item item-input">
+        <span class="input-label">Ante ($)</span>
+        <input type="tel" pattern="\d*" placeholder="100"
+               ng-model="pushbot.ante"></input>
+      </label>
+
+      <!-- Players to Act. -->
+      <div class="item item-divider">
+        Players to Act <span class="divider-value">{{ pushbot.players }} players</span>
+      </div>
+      <div class="item range range-positive item-stacked-label">
+        <i class="icon">1</i>
+        <input type="range" name="players" min="1" max="9" value="2"
+               ng-model="pushbot.players">
+        <i class="icon">9</i>
+      </div>
+      <div class="button-bar bar-light">
+        <a class="button">Loose</a>
+        <a class="button">Average</a>
+        <a class="button">Tight</a>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>

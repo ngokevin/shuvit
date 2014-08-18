@@ -1,0 +1,11 @@
+@import 'base';
+
+.pushbot {
+    .input-label {
+        max-width: 50%;
+        width: 45%;
+    }
+    .input-label + input {
+        flex: 1 0 170px;
+    }
+}

@@ -1,19 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="com.ionicframework.myapp664399" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-  <name>myApp</name>
+<widget id="com.ionicframework.myapp664399" version="0.0.1"
+        xmlns="http://www.w3.org/ns/widgets"
+        xmlns:cdv="http://cordova.apache.org/ns/1.0">
+  <name>Poker Shove</name>
   <description>
-        An Ionic Framework and Cordova project.
-    </description>
-  <author email="hi@ionicframework" href="http://ionicframework.com/">
-      Ionic Framework Team
-    </author>
+    Poker tracker and cruncher.
+  </description>
+  <author email="me@ngokevin.com" href="http://ngokevin.com/">
+    Kevin Ngo
+  </author>
+
   <content src="index.html"/>
   <access origin="*"/>
+
   <preference name="webviewbounce" value="false"/>
   <preference name="UIWebViewBounce" value="false"/>
   <preference name="DisallowOverscroll" value="true"/>
   <preference name="BackupWebStorage" value="none"/>
-  <feature name="StatusBar">
-    <param name="ios-package" value="CDVStatusBar" onload="true"/>
-  </feature>
+  <preference name="fullscreen" value="true"/>
+
+  <gap:plugin name="com.phonegap.plugin.statusbar"/>
+  <gap:config-file platform="ios" parent="UIStatusBarHidden">
+    <true/>
+  </gap:config-file>
+  <gap:config-file platform="ios" parent="UIViewControllerBasedStatusBarAppearance">
+    <false/>
+  </gap:config-file>
 </widget>

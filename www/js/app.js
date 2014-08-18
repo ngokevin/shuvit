@@ -101,6 +101,16 @@ angular.module('shuvit', ['ionic', 'shuvit.controllers',
             }
         })
 
+        .state('tab.pushbot', {
+            url: '/tools/pushbot',
+            views: {
+                'tools': {
+                    templateUrl: 'templates/tools/pushbot.html',
+                    controller: 'PushbotCtrl'
+                }
+            }
+        })
+
         .state('tab.settings', {
             url: '/settings',
             views: {

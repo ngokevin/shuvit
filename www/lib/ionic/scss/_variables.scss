@@ -106,7 +106,7 @@ $button-stable-active-border:     #a2a2a2 !default;
 
 $button-positive-bg:              $positive !default;
 $button-positive-text:            #fff !default;
-$button-positive-border:          darken($positive, 15%) !default;
+$button-positive-border:          $positive;  // MODIFIED: darken($positive, 15%) !default;
 $button-positive-active-bg:       darken($positive, 15%) !default;
 $button-positive-active-border:   darken($positive, 15%) !default;
 

@@ -15,6 +15,12 @@ html body {
     color: $text;
 }
 
+.divider-value {
+    font-weight: normal;
+    position: absolute;
+    right: 12px;
+}
+
 .item-input.pickadate-wrapper {
     position: static;
 

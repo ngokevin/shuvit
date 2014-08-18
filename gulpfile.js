@@ -12,7 +12,7 @@ var paths = {
     app_js: ['./www/js/app.js'],
     css: ['./www/css/**/*.css'],
     scss: ['./www/css/**/*.scss'],
-    ionic_scss: ['./scss/**/*.scss'],
+    ionic_scss: ['./www/lib/ionic/css/**/*.scss'],
     img: ['./www/img/**/*'],
     js: ['./www/lib/ionic/js/ionic.bundle.min.js',
          './www/js/dropbox-datastores-1.1-latest.js'],  // Extra JS.
@@ -71,7 +71,7 @@ gulp.task('ios', ['css', 'js'], function() {
 // Rerun the task when a file changes
 gulp.task('watch', function() {
     gulp.watch(paths.scss, ['css']);
-    gulp.watch(paths.ionic_css, ['css']);
+    gulp.watch(paths.ionic_scss, ['css']);
     gulp.watch(paths.watch_js, ['js', 'ios']);
 });
 

@@ -148,6 +148,26 @@ angular.module('shuvit.controllers', [])
 .controller('ToolsCtrl', function($scope) {
 })
 
+.controller('PushbotCtrl', ['$scope', function($scope) {
+    $scope.pushbot = {
+        stack: null,
+        bb: null,
+        ante: null,
+        players: 2,
+    };
+
+    function calculateM() {
+        if (!$scope.pushbot.stack || !$scope.pushbot.bb) {
+            $scope.m = null;
+            return;
+        }
+        $scope.m = ($scope.pushbot.stack /
+                    ($scope.pushbot.bb * 1.5 + $scope.pushbot.ante)).toFixed(2);
+    }
+
+    $scope.$watch('[pushbot.stack, pushbot.bb, pushbot.ante]', calculateM, true);
+}])
+
 .controller('SettingsCtrl',
     ['$ionicModal', '$scope', 'DropboxService', 'PubSubService',
     function($ionicModal, $scope, DropboxService, PubSubService) {
