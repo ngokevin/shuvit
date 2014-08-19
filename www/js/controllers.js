@@ -76,6 +76,18 @@ angular.module('shuvit.controllers', [])
     window.onresize = _.debounce(refreshChart, 100);
 }])
 
+.controller('StatsCtrl', ['$scope', 'StatsService', function($scope, StatsService) {
+    $scope.stats = {
+        avgBuyin: StatsService.avgBuyin(),
+        avgResult: StatsService.avgResult(),
+        buyins: StatsService.buyins(),
+        numSessions: StatsService.numSessions(),
+        roi: StatsService.roi(),
+        results: StatsService.results(),
+        profit: StatsService.profit()
+    };
+}])
+
 .controller('SessionAddCtrl',
     ['$rootScope', '$scope', '$state', 'SessionService',
     function($rootScope, $scope, $state, SessionService) {

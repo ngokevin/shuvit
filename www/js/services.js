@@ -216,6 +216,64 @@ angular.module('shuvit.services', [])
     };
 }])
 
+.service('StatsService', ['SessionService', function(SessionService) {
+    var sessions = SessionService.get();
+
+    function get() {
+        sessions = SessionService.get();
+    }
+
+    function avgBuyin() {
+        get();
+        return (buyins() / numSessions()).toFixed(2);
+    }
+
+    function avgResult() {
+        get();
+        return (results() / numSessions()).toFixed(2);
+    }
+
+    function buyins() {
+        get();
+        return _.reduce(sessions, function(_buyin, session) {
+            return _buyin + session.buyin;
+        }, 0).toFixed(0);
+    }
+
+    function numSessions() {
+        get();
+        return sessions.length;
+    }
+
+    function profit() {
+        get();
+        return _.reduce(sessions, function(_profit, session) {
+            return _profit + session.profit;
+        }, 0).toFixed(0);
+    }
+
+    function results() {
+        get();
+        return _.reduce(sessions, function(_result, session) {
+            return _result + session.result;
+        }, 0).toFixed(0);
+    }
+
+    return {
+        avgBuyin: avgBuyin,
+        avgResult: avgResult,
+        buyins: buyins,
+        numSessions: numSessions,
+        profit: profit,
+        results: results,
+        roi: function() {
+            // (Gain - Cost) / Cost
+            return ((results() - buyins()) /
+                    buyins() * 100).toFixed(2);
+        }
+    };
+}])
+
 .service('LocalStorageSessionService', function() {
     var sessions = [];
 

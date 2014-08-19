@@ -51,6 +51,16 @@ angular.module('shuvit', ['ionic', 'shuvit.controllers',
             }
         })
 
+        .state('tab.stats', {
+            url: '/tracker/stats',
+            views: {
+                'tracker': {
+                    templateUrl: 'templates/stats.html',
+                    controller: 'StatsCtrl'
+                }
+            }
+        })
+
         .state('tab.session_add', {
             url: '/session/add',
             views: {

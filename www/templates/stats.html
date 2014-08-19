@@ -1,0 +1,41 @@
+<ion-view title="Stats">
+  <ion-content>
+    <div class="card stats">
+      <div class="item item-divider">
+        General
+      </div>
+      <div class="item item-input">
+        <span class="input-label">ROI</span>
+        <span>{{ stats.roi }}%</span>
+      </div>
+      <div class="item item-input">
+        <span class="input-label">Sessions</span>
+        <span>{{ stats.numSessions }}</span>
+      </div>
+      <div class="item item-input">
+        <span class="input-label">Buy-ins</span>
+        <span>${{ stats.buyins }}</span>
+      </div>
+      <div class="item item-input">
+        <span class="input-label">Gross $</span>
+        <span>${{ stats.results }}</span>
+      </div>
+      <div class="item item-input">
+        <span class="input-label">Net $</span>
+        <span>${{ stats.profit }}</span>
+      </div>
+
+      <div class="item item-divider">
+        Averages
+      </div>
+      <div class="item item-input">
+        <span class="input-label">Buy-in</span>
+        <span>${{ stats.avgBuyin }}</span>
+      </div>
+      <div class="item item-input">
+        <span class="input-label">Cash-out</span>
+        <span>${{ stats.avgResult }}</span>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>
