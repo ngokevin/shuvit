@@ -1,15 +1,29 @@
 <ion-view title="Tracker">
+  <ion-nav-buttons side="right">
+    <a class="button button-clear button-positive" href="#/tab/session/add">
+      <i class="icon ion-ios7-plus-empty"></i>
+    </a>
+  </ion-nav-buttons>
   <ion-content class="padding">
     <div class="chart"></div>
+
     <a class="button button-block button-light"
-       href="#tab/session/list">
-      <i class="icon ion-clipboard"></i>
-      <span>View Sessions</span>
+       href="#tab/tracker/filters">
+       <i class="icon ion-ios7-settings"></i>
+       <span>Chart Filters</span>
     </a>
-    <a class="button button-block button-positive"
-       href="#tab/session/add">
-      <i class="icon ion-plus-round"></i>
-      <span>Add Session</span>
-    </a>
+
+    <div class="button-bar">
+      <a class="button button-block button-light"
+         href="#tab/session/list">
+        <i class="icon ion-ios7-calendar-outline"></i>
+        <span>Sessions</span>
+      </a>
+      <a class="button button-block button-light"
+         href="#tab/tracker/stats">
+        <i class="icon ion-ios7-paper-outline"></i>
+        <span>Stats</span>
+      </a>
+    </div>
   </ion-content>
 </ion-view>
