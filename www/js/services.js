@@ -225,12 +225,12 @@ angular.module('shuvit.services', [])
 
     function avgBuyin() {
         get();
-        return (buyins() / numSessions()).toFixed(2);
+        return (buyins() / numSessions()).toFixed(2) || 0;
     }
 
     function avgResult() {
         get();
-        return (results() / numSessions()).toFixed(2);
+        return (results() / numSessions()).toFixed(2) || 0;
     }
 
     function buyins() {
@@ -269,7 +269,7 @@ angular.module('shuvit.services', [])
         roi: function() {
             // (Gain - Cost) / Cost
             return ((results() - buyins()) /
-                    buyins() * 100).toFixed(2);
+                    buyins() * 100).toFixed(2) || 0;
         }
     };
 }])
