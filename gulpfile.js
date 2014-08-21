@@ -1,3 +1,4 @@
+var del = require('del');
 var gulp = require('gulp');
 var browserify = require('browserify');
 var concat = require('gulp-concat');
@@ -12,12 +13,17 @@ var paths = {
     app_js: ['./www/js/app.js'],
     css: ['./www/css/**/*.css'],
     scss: ['./www/css/**/*.scss'],
-    ionic_scss: ['./www/lib/ionic/css/**/*.scss'],
+    ionic_scss: ['./www/lib/ionic/css/**/*.scss',
+                 './scss/**/*.scss'],
     img: ['./www/img/**/*'],
     js: ['./www/lib/ionic/js/ionic.bundle.min.js',
          './www/js/dropbox-datastores-1.1-latest.js'],  // Extra JS.
     watch_js: ['./www/js/*.js'],
 };
+
+gulp.task('clean', function(done) {
+    del(['./www/build/*'], done);
+});
 
 gulp.task('ionic_css', function(done) {
     return gulp.src(paths.ionic_scss)
@@ -35,7 +41,7 @@ gulp.task('scss', function(done) {
         .pipe(gulp.dest('./www/css/'));
 });
 
-gulp.task('css', ['ionic_css', 'scss'], function(done) {
+gulp.task('css', ['clean', 'ionic_css', 'scss'], function(done) {
     gulp.src(paths.css.concat(['./www/build/bundle.css']))
         .pipe(concat('bundle.css'))
         .pipe(gulp.dest('./www/build/'))
