@@ -2,7 +2,7 @@ var $ = require('jquery');
 var settings_local = require('./settings_local.js');
 
 var exports = {
-    title: 'Live Poker Pro',
+    title: 'Poker Oven',
     cordova: document.URL.indexOf('http://') === -1 &&
              document.URL.indexOf('https://') === -1,
     dropboxKey: 'FAKE-KEY-FOR-TEST'

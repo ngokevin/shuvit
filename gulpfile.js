@@ -21,8 +21,8 @@ var paths = {
     watch_js: ['./www/js/*.js'],
 };
 
-gulp.task('clean', function(done) {
-    del(['./www/build/*'], done);
+gulp.task('clean_css', function(done) {
+    del(['./www/build/*.css'], done);
 });
 
 gulp.task('ionic_css', function(done) {
@@ -41,7 +41,7 @@ gulp.task('scss', function(done) {
         .pipe(gulp.dest('./www/css/'));
 });
 
-gulp.task('css', ['clean', 'ionic_css', 'scss'], function(done) {
+gulp.task('css', ['clean_css', 'ionic_css', 'scss'], function(done) {
     gulp.src(paths.css.concat(['./www/build/bundle.css']))
         .pipe(concat('bundle.css'))
         .pipe(gulp.dest('./www/build/'))

@@ -1,0 +1,25 @@
+<ion-view title="Opponent Journal" class="opponentjournal">
+  <ion-nav-buttons side="right">
+    <a class="button button-clear button-positive" ui-sref="tabs.opponent_add">
+      <i class="icon ion-ios7-plus-empty"></i>
+    </a>
+  </ion-nav-buttons>
+  <ion-content>
+    <ion-list can-swipe="true">
+      <ion-item class="item-avatar"
+                ng-repeat="opponent in opponents.slice() | orderBy:'name':true"
+                ui-sref="tabs.opponent_detail:({id: opponent.id})">
+        <img src="img/avatar.jpg">
+        <h2>{{ opponent.name }}</h2>
+        <p>{{ opponent.description }}</p>
+
+        <ion-option-button class="button-calm" ng-click="">
+          Update
+        </ion-option-button>
+        <ion-option-button class="button-assertive" ng-click="">
+          Delete
+        </ion-option-button>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

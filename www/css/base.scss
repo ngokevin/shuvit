@@ -15,6 +15,10 @@ html body {
     color: $text;
 }
 
+[ui-sref]:hover {
+    cursor: pointer;
+}
+
 .divider-value {
     font-weight: normal;
     position: absolute;

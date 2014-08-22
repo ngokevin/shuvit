@@ -54,7 +54,7 @@ angular.module('shuvit', ['ionic', 'shuvit.controllers',
         .state('tab.stats', {
             url: '/tracker/stats',
             views: {
-                'tracker': {
+                'tracker': {  // Our UI view is in tracker.
                     templateUrl: 'templates/stats.html',
                     controller: 'StatsCtrl'
                 }
@@ -117,6 +117,36 @@ angular.module('shuvit', ['ionic', 'shuvit.controllers',
                 'tools': {
                     templateUrl: 'templates/tools/pushbot.html',
                     controller: 'PushbotCtrl'
+                }
+            }
+        })
+
+        .state('tab.opponent_list', {
+            url: '/tools/opponent/list',
+            views: {
+                'tools': {
+                    templateUrl: 'templates/tools/opponent/list.html',
+                    controller: 'OpponentListCtrl'
+                }
+            }
+        })
+
+        .state('tab.opponent_add', {
+            url: '/tools/opponent/add',
+            views: {
+                'tools': {
+                    templateUrl: 'templates/tools/opponent/add.html',
+                    controller: 'OpponentAddCtrl'
+                }
+            }
+        })
+
+        .state('tab.opponent_detail', {
+            url: '/tools/opponent/detail',
+            views: {
+                'tools': {
+                    templateUrl: 'templates/tools/opponent/detail.html',
+                    controller: 'OpponentDetailCtrl'
                 }
             }
         })

@@ -6,6 +6,7 @@ require('./picker');
 require('./picker.date');
 var settings = require('./settings');
 
+
 function BaseSessionAddCtrl($rootScope, $scope, $state, SessionService) {
     /* Base controller for add and update session views. */
     $scope.session = {
@@ -178,6 +179,19 @@ angular.module('shuvit.controllers', [])
     }
 
     $scope.$watch('[pushbot.stack, pushbot.bb, pushbot.ante]', calculateM, true);
+}])
+
+.controller('OpponentListCtrl', ['$scope', function($scope) {
+    $scope.opponents = [{
+        name: 'Chicago',
+        description: 'Loose-aggressive, gambler.',
+    }];
+}])
+
+.controller('OpponentAddCtrl', ['$scope', function($scope) {
+}])
+
+.controller('OpponentDetailCtrl', ['$scope', function($scope) {
 }])
 
 .controller('SettingsCtrl',
