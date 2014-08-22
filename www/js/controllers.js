@@ -82,6 +82,7 @@ angular.module('shuvit.controllers', [])
         avgBuyin: StatsService.avgBuyin(),
         avgResult: StatsService.avgResult(),
         buyins: StatsService.buyins(),
+        itm: StatsService.itm(),
         numSessions: StatsService.numSessions(),
         roi: StatsService.roi(),
         results: StatsService.results(),

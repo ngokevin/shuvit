@@ -240,6 +240,13 @@ angular.module('shuvit.services', [])
         }, 0).toFixed(0);
     }
 
+    function itm() {
+        get();
+        return (_.filter(sessions, function(session) {
+            return !session.cash && session.result >= session.buyin;
+        }).length / sessions.length).toFixed(2);
+    }
+
     function numSessions() {
         get();
         return sessions.length;
@@ -263,6 +270,7 @@ angular.module('shuvit.services', [])
         avgBuyin: avgBuyin,
         avgResult: avgResult,
         buyins: buyins,
+        itm: itm,
         numSessions: numSessions,
         profit: profit,
         results: results,
