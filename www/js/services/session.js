@@ -286,23 +286,13 @@ angular.module('shuvit.services.session', [])
     var sessions = [];
 
     if (localStorage.getItem('sessions')) {
-        sessions = deserialize(localStorage.getItem('sessions'));
+        sessions = JSON.parse(localStorage.getItem('sessions'));
     } else {
         save();
     }
 
-    function serialize(_sessions) {
-        // To LS.
-        return JSON.stringify(_sessions);
-    }
-
-    function deserialize(_sessions) {
-        // From LS.
-        return JSON.parse(_sessions);
-    }
-
     function save() {
-        localStorage.setItem('sessions', serialize(sessions));
+        localStorage.setItem('sessions', JSON.stringify(sessions));
     }
 
     return {

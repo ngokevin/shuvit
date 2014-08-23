@@ -60,9 +60,21 @@ angular.module('shuvit.services', [
         PubSubService.publish('dropbox-promise', [createPromise()]);
     }
 
+    var sessionReady;
+    var villainReady;
+    function tryPublishPromise() {
+        if (sessionReady && villainReady) {
+            PubSubService.publish('dropbox-promise', [createPromise()]);
+            $(document).trigger('dropbox-promise');
+        }
+    }
     PubSubService.subscribe('session-ready', function() {
-        PubSubService.publish('dropbox-promise', [createPromise()]);
-        $(document).trigger('dropbox-promise');
+        sessionReady = true;
+        tryPublishPromise();
+    });
+    PubSubService.subscribe('villain-ready', function() {
+        villainReady = true;
+        tryPublishPromise();
     });
 
     return {

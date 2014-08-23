@@ -18,7 +18,9 @@ angular.module('shuvit', [
 
 .run(
     ['$ionicPlatform', '$rootScope', 'DropboxService', 'SessionService',
-    function($ionicPlatform, $rootScope, DropboxService, SessionService) {
+     'VillainService',
+    function($ionicPlatform, $rootScope, DropboxService, SessionService,
+             VillainService) {
     $ionicPlatform.ready(function() {
         // Hide the accessory bar by default.
         if (window.cordova && window.cordova.plugins.Keyboard) {
@@ -158,7 +160,7 @@ angular.module('shuvit', [
         .state('tab.villain_update', {
             url: '/villain/update/{villainId:[0-9]+}',
             views: {
-                'tracker': {
+                'tools': {
                     templateUrl: 'templates/tools/villain/add.html',
                     controller: 'VillainUpdateCtrl'
                 }

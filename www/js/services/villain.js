@@ -47,7 +47,7 @@ angular.module('shuvit.services.villain', [])
 
     PubSubService.publish('villain-ready');
 
-    function get(mock) {
+    function get() {
         if (using == 'datastore') {
             return DatastoreVillainService.get();
         } else {
@@ -108,6 +108,15 @@ angular.module('shuvit.services.villain', [])
     var villainTable;
     var villains = [];
 
+    function transformVillain(villainRecord) {
+        // Transform the Datastore record into a plain JS object.
+        var villain = {};
+        _.each(VillainModel.fields, function(field) {
+            villain[field] = villainRecord.get(field);
+        });
+        return villain;
+    }
+
     function merge() {
         // Merge LS to Dropbox.
         _.each(LocalStorageVillainService.get(), add);
@@ -116,7 +125,7 @@ angular.module('shuvit.services.villain', [])
 
     function get() {
         // Refresh and return;
-        villains = villainTable.query();
+        villains = _.map(villainTable.query(), transformVillain);
         return villains;
     }
 
@@ -168,23 +177,13 @@ angular.module('shuvit.services.villain', [])
     var villains = [];
 
     if (localStorage.getItem('villains')) {
-        villains = deserialize(localStorage.getItem('villains'));
+        villains = JSON.parse(localStorage.getItem('villains'));
     } else {
         save();
     }
 
-    function serialize(_villains) {
-        // To LS.
-        return JSON.stringify(_villains);
-    }
-
-    function deserialize(_villains) {
-        // From LS.
-        return JSON.parse(_villains);
-    }
-
     function save() {
-        localStorage.setItem('villains', serialize(villains));
+        localStorage.setItem('villains', JSON.stringify(villains));
     }
 
     return {

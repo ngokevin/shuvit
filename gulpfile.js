@@ -18,7 +18,7 @@ var paths = {
     img: ['./www/img/**/*'],
     js: ['./www/lib/ionic/js/ionic.bundle.min.js',
          './www/js/dropbox-datastores-1.1-latest.js'],  // Extra JS.
-    watch_js: ['./www/js/*.js'],
+    watch_js: ['./www/js/**/*.js'],
 };
 
 gulp.task('clean_css', function(done) {
