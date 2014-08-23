@@ -7,7 +7,7 @@
   <ion-content>
     <ion-list can-swipe="true">
       <ion-item class="item-avatar"
-                ng-repeat="villain in villains.slice() | orderBy:'name':true"
+                ng-repeat="villain in villains.slice() track by $index | orderBy:'name'"
                 ui-sref="tab.villain_detail({villainId: villain.id})">
         <img src="img/avatar.jpg">
         <h2>{{ villain.name }}</h2>
