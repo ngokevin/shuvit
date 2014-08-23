@@ -7,8 +7,7 @@ function BaseVillainAddCtrl($rootScope, $scope, $state, VillainService) {
     $scope.villain = {
         name: null,
         description: null,
-        preflop: null,
-        postflop: null,
+        style: null,
         notes: null,
         history: null
     };
@@ -54,8 +53,7 @@ angular.module('shuvit.controllers.villain', [])
         id: villain.id,  // Needed for update since we do a delete + add.
         name: villain.name,
         description: villain.description,
-        preflop: villain.preflop,
-        postflop: villain.postflop,
+        style: villain.style,
         notes: villain.notes,
         history: villain.history
     };
@@ -72,14 +70,13 @@ angular.module('shuvit.controllers.villain', [])
     function($scope, $state, VillainService) {
     $scope.villains = VillainService.get();
 
-    $scope.deleteVillain = function(i) {
-        var id = $scope.villains[i].id;
+    $scope.deleteVillain = function(id) {
         VillainService.del(id);
         $scope.villains = VillainService.get();
     };
 
-    $scope.updateVillain = function(i) {
-        $state.go('tab.villain_update', {villainId: $scope.villains[i].id});
+    $scope.updateVillain = function(id) {
+        $state.go('tab.villain_update', {villainId: id});
     };
 }])
 

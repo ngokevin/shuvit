@@ -8,15 +8,15 @@
     <ion-list can-swipe="true">
       <ion-item class="item-avatar"
                 ng-repeat="villain in villains.slice() | orderBy:'name':true"
-                ui-sref="tab.villain_detail:({id: villain.id})">
+                ui-sref="tab.villain_detail({villainId: villain.id})">
         <img src="img/avatar.jpg">
         <h2>{{ villain.name }}</h2>
         <p>{{ villain.description }}</p>
 
-        <ion-option-button class="button-calm" ng-click="">
+        <ion-option-button class="button-calm" ng-click="updateVillain(villain.id)">
           Update
         </ion-option-button>
-        <ion-option-button class="button-assertive" ng-click="">
+        <ion-option-button class="button-assertive" ng-click="deleteVillain(villain.id)">
           Delete
         </ion-option-button>
       </ion-item>

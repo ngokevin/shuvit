@@ -1,0 +1,25 @@
+<ion-view title="{{ villain.name }}">
+  <ion-content>
+    <div class="list card">
+      <div class="item item-avatar">
+        <img src="img/avatar.jpg">
+        <h2>{{ villain.name }}</h2>
+        <p class="no-wrap">{{ villain.description }}</p>
+      </div>
+
+      <div class="item item-text-wrap" ng-show="villain.style">
+        <p>{{ villain.style }}</p>
+      </div>
+
+      <label class="item item-input item-stacked-label">
+        <span class="input-label">Notes on Playing Style</span>
+        <p>{{ villain.notes }}</p>
+      </label>
+
+      <label class="item item-input item-stacked-label">
+        <span class="input-label">History Against Me</span>
+        <p>{{ villain.history }}</p>
+      </label>
+    </div>
+  </ion-content>
+</ion-view>

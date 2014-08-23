@@ -137,14 +137,13 @@ angular.module('shuvit.controllers.session', [])
     function($scope, $state, SessionService) {
     $scope.sessions = SessionService.get();
 
-    $scope.deleteSession = function(i) {
-        var id = $scope.sessions[i].id;
+    $scope.deleteSession = function(id) {
         SessionService.del(id);
         $scope.sessions = SessionService.get();
     };
 
-    $scope.updateSession = function(i) {
-        $state.go('tab.session_update', {sessionId: $scope.sessions[i].id});
+    $scope.updateSession = function(id) {
+        $state.go('tab.session_update', {sessionId: id});
     };
 }])
 

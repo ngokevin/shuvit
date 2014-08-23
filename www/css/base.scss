@@ -62,11 +62,21 @@ label.item-stacked-label {
         left: 3.5px;
         position: relative;
     }
-    textarea {
+    textarea,
+    p {
         padding-left: 3.5px;
     }
 }
 
+.list label.item-stacked-label {
+    padding-bottom: 15px;
+    padding-top: 15px;
+}
+
 button.button-block.submit {
     bottom: 10px;
+}
+
+.item p.no-wrap {
+    white-space: normal;
 }

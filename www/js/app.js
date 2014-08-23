@@ -146,11 +146,21 @@ angular.module('shuvit', [
         })
 
         .state('tab.villain_detail', {
-            url: '/tools/villain/detail',
+            url: '/tools/villain/{villainId:[0-9]+}',
             views: {
                 'tools': {
                     templateUrl: 'templates/tools/villain/detail.html',
                     controller: 'VillainDetailCtrl'
+                }
+            }
+        })
+
+        .state('tab.villain_update', {
+            url: '/villain/update/{villainId:[0-9]+}',
+            views: {
+                'tracker': {
+                    templateUrl: 'templates/tools/villain/add.html',
+                    controller: 'VillainUpdateCtrl'
                 }
             }
         })

@@ -9,14 +9,12 @@ angular.module('shuvit.services.villain', [])
     /* id -- long, epoch time for creation of villain
      * name -- name of villain
      * description -- physical description
-     * preflop -- whether tight/loose or passive/aggressive
-     * postflop -- whether tight/loose or passive/aggressive
+     * style -- tight or loose + passive or aggressive
      * notes -- notes on their play
      * history -- history versus player
     */
     return {
-        fields: ['id', 'name', 'description', 'preflop', 'postflop', 'notes',
-                 'history'],
+        fields: ['id', 'name', 'description', 'style', 'notes', 'history'],
         validate: function(villain) {
             return villain.name;
         }
@@ -51,9 +49,9 @@ angular.module('shuvit.services.villain', [])
 
     function get(mock) {
         if (using == 'datastore') {
-            return transform(DatastoreVillainService.get());
+            return DatastoreVillainService.get();
         } else {
-            return transform(LocalStorageVillainService.get());
+            return LocalStorageVillainService.get();
         }
     }
 
@@ -68,8 +66,7 @@ angular.module('shuvit.services.villain', [])
             id: villain.id || new Date().getTime(),
             name: villain.name,
             description: villain.description || '',
-            preflop: villain.preflop || '',
-            postflop: villain.postflop || '',
+            style: villain.style || '',
             notes: villain.notes || '',
             history: villain.history || '',
         };
