@@ -1,0 +1,69 @@
+<ion-view title="{{ update && 'Update Villain' || 'Add Villain' }}"
+          class="villain">
+  <ion-content class="padding">
+    <div class="list">
+      <div class="item item-divider">
+        General
+      </div>
+      <label class="item item-input">
+        <span class="input-label">Name</span>
+        <input type="text" placeholder="Antonio Esfandiari"
+               ng-model="villain.name"></input>
+      </label>
+      <label class="item item-input item-stacked-label">
+        <span class="input-label">Description</span>
+        <textarea placeholder="Magician from Iran. Wears glasses."
+                  ng-model="villain.description"></textarea>
+      </label>
+    </div>
+
+    <div class="list">
+      <div class="item item-divider">
+        Poker Play
+      </div>
+      <label class="item item-input item-select">
+        <div class="input-label">
+          Preflop
+        </div>
+        <select>
+          <option>Loose / Passive</option>
+          <option>Tight / Passive</option>
+          <option>Loose / Aggressive</option>
+          <option>Tight / Aggressive</option>
+        </select>
+      </label>
+      <label class="item item-input item-select">
+        <div class="input-label">
+          Postflop
+        </div>
+        <select>
+          <option>Loose / Passive</option>
+          <option>Tight / Passive</option>
+          <option>Loose / Aggressive</option>
+          <option>Tight / Aggressive</option>
+        </select>
+      </label>
+
+      <label class="item item-input item-stacked-label">
+        <span class="input-label">Notes on Playing Style</span>
+        <textarea placeholder="Tight, aggressive. Not tricky. But can open wide in LP. Saw him 3bet with AJo."
+                  ng-model="villain.notes"></textarea>
+      </label>
+      <label class="item item-input item-stacked-label">
+        <span class="input-label">History Against Me</span>
+        <textarea placeholder="Thinks I'm aggressive.
+                               Saw me bluff river with a busted draw."
+                  ng-model="villain.history"></textarea>
+      </label>
+    </div>
+
+    <button class="button button-block submit"
+        ng-class="{'button-stable': !villain.valid,
+                   'button-balanced': villain.valid}"
+        ng-disabled="!villain.valid"
+        ng-click="saveVillain()">
+      <i class="icon ion-checkmark-round"></i>
+      {{ update && 'Update Villain' || 'Add Villain' }}
+    </button>
+  </ion-content>
+</ion-view>

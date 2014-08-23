@@ -1,17 +1,17 @@
-<ion-view title="Opponent Journal" class="opponentjournal">
+<ion-view title="Villain Journal" class="villainjournal">
   <ion-nav-buttons side="right">
-    <a class="button button-clear button-positive" ui-sref="tabs.opponent_add">
+    <a class="button button-clear button-positive" ui-sref="tab.villain_add">
       <i class="icon ion-ios7-plus-empty"></i>
     </a>
   </ion-nav-buttons>
   <ion-content>
     <ion-list can-swipe="true">
       <ion-item class="item-avatar"
-                ng-repeat="opponent in opponents.slice() | orderBy:'name':true"
-                ui-sref="tabs.opponent_detail:({id: opponent.id})">
+                ng-repeat="villain in villains.slice() | orderBy:'name':true"
+                ui-sref="tab.villain_detail:({id: villain.id})">
         <img src="img/avatar.jpg">
-        <h2>{{ opponent.name }}</h2>
-        <p>{{ opponent.description }}</p>
+        <h2>{{ villain.name }}</h2>
+        <p>{{ villain.description }}</p>
 
         <ion-option-button class="button-calm" ng-click="">
           Update

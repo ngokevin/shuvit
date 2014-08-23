@@ -121,32 +121,32 @@ angular.module('shuvit', ['ionic', 'shuvit.controllers',
             }
         })
 
-        .state('tab.opponent_list', {
-            url: '/tools/opponent/list',
+        .state('tab.villain_list', {
+            url: '/tools/villain/list',
             views: {
                 'tools': {
-                    templateUrl: 'templates/tools/opponent/list.html',
-                    controller: 'OpponentListCtrl'
+                    templateUrl: 'templates/tools/villain/list.html',
+                    controller: 'VillainListCtrl'
                 }
             }
         })
 
-        .state('tab.opponent_add', {
-            url: '/tools/opponent/add',
+        .state('tab.villain_add', {
+            url: '/tools/villain/add',
             views: {
                 'tools': {
-                    templateUrl: 'templates/tools/opponent/add.html',
-                    controller: 'OpponentAddCtrl'
+                    templateUrl: 'templates/tools/villain/add.html',
+                    controller: 'VillainAddCtrl'
                 }
             }
         })
 
-        .state('tab.opponent_detail', {
-            url: '/tools/opponent/detail',
+        .state('tab.villain_detail', {
+            url: '/tools/villain/detail',
             views: {
                 'tools': {
-                    templateUrl: 'templates/tools/opponent/detail.html',
-                    controller: 'OpponentDetailCtrl'
+                    templateUrl: 'templates/tools/villain/detail.html',
+                    controller: 'VillainDetailCtrl'
                 }
             }
         })

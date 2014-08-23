@@ -182,17 +182,17 @@ angular.module('shuvit.controllers', [])
     $scope.$watch('[pushbot.stack, pushbot.bb, pushbot.ante]', calculateM, true);
 }])
 
-.controller('OpponentListCtrl', ['$scope', function($scope) {
-    $scope.opponents = [{
+.controller('VillainListCtrl', ['$scope', function($scope) {
+    $scope.villains = [{
         name: 'Chicago',
         description: 'Loose-aggressive, gambler.',
     }];
 }])
 
-.controller('OpponentAddCtrl', ['$scope', function($scope) {
+.controller('VillainAddCtrl', ['$scope', function($scope) {
 }])
 
-.controller('OpponentDetailCtrl', ['$scope', function($scope) {
+.controller('VillainDetailCtrl', ['$scope', function($scope) {
 }])
 
 .controller('SettingsCtrl',

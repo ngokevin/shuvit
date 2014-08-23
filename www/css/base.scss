@@ -56,3 +56,17 @@ html body {
         text-align: center;
     }
 }
+
+label.item-stacked-label {
+    .input-label {
+        left: 3.5px;
+        position: relative;
+    }
+    textarea {
+        padding-left: 3.5px;
+    }
+}
+
+button.button-block.submit {
+    bottom: 10px;
+}
