@@ -7,6 +7,8 @@ require('angular-ui-router');
 require('./controllers');
 require('./filters');
 require('./services');
+require('./services/session');
+require('./services/villain');
 require('./settings');
 
 angular.module('shuvit', ['ionic', 'shuvit.controllers',
