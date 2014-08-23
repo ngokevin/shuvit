@@ -1,8 +1,13 @@
 var $ = require('jquery');
 var Promise = require('es6-promise').Promise;
+require('./services/session');
+require('./services/villain');
 var settings = require('./settings');
 
-angular.module('shuvit.services', [])
+angular.module('shuvit.services', [
+    'shuvit.services.session',
+    'shuvit.services.villain'
+])
 
 .service('DropboxService', ['PubSubService', function(PubSubService) {
     // Dropbox stuff.

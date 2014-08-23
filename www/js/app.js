@@ -7,12 +7,14 @@ require('angular-ui-router');
 require('./controllers');
 require('./filters');
 require('./services');
-require('./services/session');
-require('./services/villain');
 require('./settings');
 
-angular.module('shuvit', ['ionic', 'shuvit.controllers',
-                          'shuvit.filters', 'shuvit.services'])
+angular.module('shuvit', [
+    'ionic',
+    'shuvit.controllers',
+    'shuvit.filters',
+    'shuvit.services',
+])
 
 .run(
     ['$ionicPlatform', '$rootScope', 'DropboxService', 'SessionService',

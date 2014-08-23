@@ -3,7 +3,7 @@ var _ = require('underscore');
 var Promise = require('es6-promise').Promise;
 var settings = require('../settings');
 
-angular.module('shuvit.services', [])
+angular.module('shuvit.services.villain', [])
 
 .service('VillainModel', function() {
     /* id -- long, epoch time for creation of villain
