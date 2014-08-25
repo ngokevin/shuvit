@@ -4,6 +4,7 @@ function calcPushbotRange(stack, bb, ante, players, callRangePct) {
     var callPct = Math.exp(callRangePct, players);
 
     var pot = bb * 1.5 + ante;
+    // Calculate EV if everyone folds.
     var profitFold = (1 - callPct) * pot;
 
     var profitableHands = [];
@@ -20,5 +21,5 @@ function calcPushbotRange(stack, bb, ante, players, callRangePct) {
 }
 
 module.exports = {
-
+    calcPushbotRange: calcPushbotRange
 };
