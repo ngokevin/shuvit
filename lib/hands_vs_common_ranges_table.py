@@ -25,7 +25,7 @@ def dump_hand_vs_common_ranges():
         }
 
     print 'Writing out.'
-    output = open('output/hands_vs_common_ranges.json', 'w')
+    output = open('output/hands_vs_common_ranges_table.json', 'w')
     output.write(json.dumps(hand_to_equities))
 
 

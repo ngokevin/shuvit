@@ -4,6 +4,7 @@ var _ = require('underscore');
 var chart = require('./chart');
 require('./controllers/session');
 require('./controllers/villain');
+var Pushbot = require('./libpoker/pushbot');
 require('./picker');
 require('./picker.date');
 require('./services');
@@ -26,15 +27,27 @@ angular.module('shuvit.controllers', [
     };
 
     function calculateM() {
+        // M = stack / pot.
         if (!$scope.pushbot.stack || !$scope.pushbot.bb) {
             $scope.m = null;
             return;
         }
         $scope.m = ($scope.pushbot.stack /
-                    ($scope.pushbot.bb * 1.5 + $scope.pushbot.ante)).toFixed(2);
+                    ($scope.pushbot.bb * 1.5 + $scope.pushbot.ante * 10)).toFixed(2);
+    }
+
+    function calculatePushRange() {
+        var pushbot = $scope.pushbot;
+        if (pushbot.stack && pushbot.bb && pushbot.players) {
+            var pushRange = Pushbot.calcPushbotRange(
+                pushbot.stack, pushbot.bb, pushbot.ante, pushbot.players, 15);
+            console.log(pushRange);
+        }
     }
 
     $scope.$watch('[pushbot.stack, pushbot.bb, pushbot.ante]', calculateM, true);
+    $scope.$watch('[pushbot.stack, pushbot.bb, pushbot.ante, pushbot.players]',
+                  _.debounce(calculatePushRange, 500), true);
 }])
 
 .controller('SettingsCtrl',

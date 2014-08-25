@@ -12,6 +12,7 @@ var source = require('vinyl-source-stream');
 var paths = {
     app_js: ['./www/js/app.js'],
     css: ['./www/css/**/*.css'],
+    files: ['./lib/output/*.json'],
     scss: ['./www/css/**/*.scss'],
     ionic_scss: ['./www/lib/ionic/css/**/*.scss',
                  './scss/**/*.scss'],
@@ -74,6 +75,11 @@ gulp.task('ios', ['css', 'js'], function() {
     }
 });
 
+gulp.task('files', function() {
+    return gulp.src(paths.files)
+               .pipe(gulp.dest('./www/js/libpoker/files'));
+});
+
 // Rerun the task when a file changes
 gulp.task('watch', function() {
     gulp.watch(paths.scss, ['css']);
@@ -82,4 +88,4 @@ gulp.task('watch', function() {
 });
 
 // The default task (called when you run `gulp` from cli)
-gulp.task('default', ['watch', 'css', 'js', 'ios']);
+gulp.task('default', ['watch', 'css', 'js', 'ios', 'files']);
