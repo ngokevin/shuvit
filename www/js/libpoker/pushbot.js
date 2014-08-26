@@ -14,10 +14,11 @@ function calcPushbotRange(stack, bb, ante, players, callRangePct) {
 
         and push it to an array if EV > current stack.
     */
-    console.log('Calculating push range.');
+    stack = parseInt(stack, 10);
+    bb = parseInt(bb, 10);
 
-    var profitableHands = [];
-    var pot = bb * 1.5 + (ante || 0) * 10;
+    var antes = parseInt(ante || 0, 10) * 10;
+    var pot = bb * 1.5 + antes;
 
     // Probability of someone calling is
     //     = 1 - probability of no one calling.
@@ -26,20 +27,20 @@ function calcPushbotRange(stack, bb, ante, players, callRangePct) {
     var callPct = 1 - Math.pow(foldPct, players);
 
     // Calculate EV if everyone folds.
-    var profitFold = (1 - callPct) * pot;
+    var evEveryoneFolds = (1 - callPct) * (stack + pot);
 
+    // For each hand, calculate EV if someone calls.
+    var profitableHands = [];
     var hands = Object.keys(handsVsCommonRangesTable);
     _.each(hands, function(hand) {
-        // For each hand, calculate EV if called and win.
         var equity = parseFloat(handsVsCommonRangesTable[hand][callRangePct]) / 100;
-        var profitCall = callPct * equity * stack * 2;
+        var evSomeoneCalls = callPct * equity * (pot + stack * 2);
 
-        if (profitFold + profitCall > stack) {
+        // Get total EV and check if it is profitable.
+        if (evEveryoneFolds + evSomeoneCalls > stack) {
             profitableHands.push(hand);
         }
     });
-
-    console.log('Finished calculating push range.');
     return profitableHands;
 }
 
