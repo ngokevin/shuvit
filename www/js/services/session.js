@@ -244,7 +244,7 @@ angular.module('shuvit.services.session', [])
         get();
         return (_.filter(sessions, function(session) {
             return !session.cash && session.result >= session.buyin;
-        }).length / sessions.length).toFixed(2);
+        }).length / sessions.length).toFixed(2) * 100;
     }
 
     function numSessions() {
