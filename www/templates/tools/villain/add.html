@@ -26,7 +26,6 @@
           Playing Style
         </div>
         <select ng-model="villain.style">
-          <option value=""></option>
           <option value="Loose-Passive">Loose-Passive</option>
           <option value="Tight-Passive">Tight-Passive</option>
           <option value="Loose-Aggressive">Loose-Aggressive</option>
@@ -36,11 +35,13 @@
       <label class="item item-input item-stacked-label">
         <span class="input-label">Notes on Playing Style</span>
         <textarea placeholder="Tight, aggressive. Not tricky. But can open wide in LP. Saw him 3bet with AJo."
+                  class="notes-textarea"
                   ng-model="villain.notes"></textarea>
       </label>
       <label class="item item-input item-stacked-label">
         <span class="input-label">History Against Me</span>
         <textarea placeholder="Thinks I'm aggressive. Saw me bluff river with a busted draw."
+                  class="notes-textarea"
                   ng-model="villain.history"></textarea>
       </label>
     </div>

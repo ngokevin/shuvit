@@ -1,22 +1,24 @@
 var _ = require('underscore');
+
 var handsVsCommonRangesTable = require('./files/hand_vs_common_ranges_table.json');
+var utils = require('./utils');
+
 
 function calcPushbotRange(stack, bb, ante, players, callRangePct) {
     /*
         Given stack, pot, players to act, and the range% at which players will
         call, calcPushbotRange will return the range of hands that can be
-        shoved profitably.
+        shoved profitably (cEV).
 
-        For each hand, we use the EV formula:
+        For each hand, we use the basic EV formula:
 
-            EV = ((1 - callRangePct) * pot) +
-                 (callRangePct * equityVs(callRangePct) * stack * 2)
+            EV = (%everyoneFolds * (pot + stack)) +
+                 (%someoneCalls * equityVsRange * (stack * 2 + pot))
 
         and push it to an array if EV > current stack.
     */
     stack = parseInt(stack, 10);
     bb = parseInt(bb, 10);
-
     var antes = parseInt(ante || 0, 10) * 10;
     var pot = bb * 1.5 + antes;
 

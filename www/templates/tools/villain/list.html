@@ -1,4 +1,4 @@
-<ion-view title="Villain Journal" class="villainjournal">
+<ion-view title="Villain Journal" class="villain">
   <ion-nav-buttons side="right">
     <a class="button button-clear button-positive" ui-sref="tab.villain_add">
       <i class="icon ion-ios7-plus-empty"></i>
@@ -9,7 +9,8 @@
       <ion-item class="item-avatar"
                 ng-repeat="villain in villains.slice() | orderBy:'name' track by $index"
                 ui-sref="tab.villain_detail({villainId: villain.id})">
-        <img src="img/avatar.jpg">
+        <img>
+        <i class="icon ion-ios7-person-outline avatar-icon {{ villain.style }}"></i>
         <h2>{{ villain.name }}</h2>
         <p>{{ villain.description }}</p>
 

@@ -9,3 +9,38 @@
         flex: 1 0 170px;
     }
 }
+
+.villain .item-avatar {
+    position: relative;
+
+    .avatar-icon {
+        border-radius: 100px;
+        box-shadow: 0 1px 1px 0 #eee;
+        color: $text;
+        display: inline-block;
+        font-size: 36px;
+        height: 40px;
+        left: 15px;
+        padding: 1px 9px 0;
+        position: absolute;
+        top: 17px;
+        width: 40px;
+
+        &.Loose-Passive {
+            background: $balanced;
+            color: white;
+        }
+        &.Tight-Passive {
+            background: $calm;
+            color: white;
+        }
+        &.Tight-Aggressive {
+            background: $energized;
+            color: white;
+        }
+        &.Loose-Aggressive {
+            background: $assertive;
+            color: white;
+        }
+    }
+}

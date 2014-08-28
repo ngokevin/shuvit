@@ -7,6 +7,8 @@ $text: #1F1F21;
 
 $assertive: #ef4e3a;
 $balanced: #4CD964;
+$calm: #43cee6;
+$energized: #f0b840;
 
 $status-bar: 20px;
 
@@ -79,4 +81,8 @@ button.button-block.submit {
 
 .item p.no-wrap {
     white-space: normal;
+}
+
+.notes-textarea {
+    min-height: 75px;
 }

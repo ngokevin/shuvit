@@ -1,8 +1,9 @@
-<ion-view title="{{ villain.name }}">
+<ion-view title="{{ villain.name }}" class="villain">
   <ion-content>
     <div class="list card">
       <div class="item item-avatar">
-        <img src="img/avatar.jpg">
+        <img>
+        <i class="icon ion-ios7-person-outline avatar-icon {{ villain.style }}"></i>
         <h2>{{ villain.name }}</h2>
         <p class="no-wrap">{{ villain.description }}</p>
       </div>
