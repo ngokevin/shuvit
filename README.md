@@ -21,11 +21,13 @@ Poker tracker and pocket cruncher for live tournament poker players.
 - ```npm install```
 - ```bower install```
 - ```cp www/js/settings_local.js.dist www/js/settings_local.js```
-- ```node_modules/.bin/gulp```
+- ```make gulp```
 
 ### Running Unit Tests
 
-- ```karma start karma.config.js```
+Uses the Karma test runner.
+
+- ```make test```
 
 ### Testing
 
