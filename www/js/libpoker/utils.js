@@ -23,11 +23,8 @@ function compareHands(handA, handB) {
     /* Compares two-card hands.
        Returns -1 if A < B.
        Returns 0 if A < B.
-       Returns 1 if A < B or if B is empty.
+       Returns 1 if A < B.
     */
-    if (!handB) {
-        return 1;
-    }
     if (handA == handB) {
         return 0;
     }
@@ -66,16 +63,25 @@ function flattenRange(hands) {
     _.each(hands, function(handA) {
         // Paired ranges are always one-size. Regular ranges are indexed.
         var type = getType(handA);
+
         // Get index within range array.
         var i = type == 'pair' ? 0 : RANKS[handA[0]] - 2;
-        // Set the better hand in the range.
         var handB = ranges[type][i];
-        ranges[type][i] = compareHands(handA, handB) > 0 ? handA : handB;
+
+        if (!handB) {
+            // Initialize the minimum hand.
+            ranges[type][i] = handA;
+            return;
+        }
+
+        // Set the worse hand since we want minimum ranges.
+        ranges[type][i] = compareHands(handA, handB) < 0 ? handA : handB;
     });
 
     return ranges;
 }
 
 module.exports = {
-    flattenRange: flattenRange
+    flattenRange: flattenRange,
+    RANKS: RANKS
 };
