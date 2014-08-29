@@ -6,3 +6,8 @@ build/
 bower_components
 npm-debug.log
 settings_local.js
+*/js/tests.js
+plugins/
+platforms/
+hooks/
+.DS_Store

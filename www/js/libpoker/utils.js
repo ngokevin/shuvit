@@ -32,9 +32,9 @@ function compareHands(handA, handB) {
         return 0;
     }
     for (var i = 0; i < 2; i++) {
-        if (RANK[handA[i]] < RANK[handB[i]]) {
+        if (RANKS[handA[i]] < RANKS[handB[i]]) {
             return -1;
-        } else if (RANK[handA[i]] > RANK[handB[i]]) {
+        } else if (RANKS[handA[i]] > RANKS[handB[i]]) {
             return 1;
         }
     }
@@ -63,13 +63,14 @@ function flattenRange(hands) {
         'suited': suitedRanges,
     };
 
-    _.each(hands, function(hand) {
+    _.each(hands, function(handA) {
         // Paired ranges are always one-size. Regular ranges are indexed.
-        var type = getType(hand);
-        var i = type == 'pair' ? 0 : RANKS[hand[0]] - 2;
-
+        var type = getType(handA);
+        // Get index within range array.
+        var i = type == 'pair' ? 0 : RANKS[handA[0]] - 2;
         // Set the better hand in the range.
-        ranges[type][i] = compareHands(hand, ranges[type][i]) > 0 ? handA : handB;
+        var handB = ranges[type][i];
+        ranges[type][i] = compareHands(handA, handB) > 0 ? handA : handB;
     });
 
     return ranges;

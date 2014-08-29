@@ -1,4 +1,5 @@
 var del = require('del');
+var glob = require('glob');
 var gulp = require('gulp');
 var browserify = require('browserify');
 var concat = require('gulp-concat');
@@ -19,7 +20,7 @@ var paths = {
     img: ['./www/img/**/*'],
     js: ['./www/lib/ionic/js/ionic.bundle.min.js',
          './www/js/dropbox-datastores-1.1-latest.js'],  // Extra JS.
-    watch_js: ['./www/js/**/*.js'],
+    watch_js: ['./www/js/**/*.js', './tests/**/*.js', '!./www/js/tests.js'],
 };
 
 gulp.task('clean_css', function(done) {
@@ -80,12 +81,20 @@ gulp.task('files', function() {
                .pipe(gulp.dest('./www/js/libpoker/files'));
 });
 
+gulp.task('tests', function() {
+    // Bundle a test JS bundle with Browserify support.
+    var testFiles = glob.sync('./tests/**/*.js');
+    return browserify(testFiles).bundle({debug: true})
+        .pipe(source('tests.js'))
+        .pipe(gulp.dest('./www/js'));
+});
+
 // Rerun the task when a file changes
 gulp.task('watch', function() {
     gulp.watch(paths.scss, ['css']);
     gulp.watch(paths.ionic_scss, ['css']);
-    gulp.watch(paths.watch_js, ['js', 'ios']);
+    gulp.watch(paths.watch_js, ['js', 'ios', 'tests']);
 });
 
 // The default task (called when you run `gulp` from cli)
-gulp.task('default', ['watch', 'css', 'js', 'ios', 'files']);
+gulp.task('default', ['watch', 'css', 'js', 'ios', 'files', 'tests']);
