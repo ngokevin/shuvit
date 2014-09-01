@@ -46,20 +46,22 @@ function flattenRange(hands) {
        e.g., [AA, KK, QQ] => 'QQ+'
        e.g., [AK, AKo, AQ, AQo, AJ] => ['AQo+, AJ+']
     */
+    // Set ranges as arrays to do lookup + compares.
     var pairedRange = [''];  // Will only contain one hand.
-    var suitedRanges = [];
-    var offsuitedRanges = [];
+    var suitedRange = [];
+    var offsuitRange = [];
     for (var i = 0; i < 13; i++) {
-        suitedRanges.push('');
-        offsuitedRanges.push('');
+        suitedRange.push('');
+        offsuitRange.push('');
     }
 
     var ranges = {
-        'offsuit': offsuitedRanges,
+        'offsuit': offsuitRange,
         'pair': pairedRange,
-        'suited': suitedRanges,
+        'suited': suitedRange,
     };
 
+    // Find the minimum hand of each rank.
     _.each(hands, function(handA) {
         // Paired ranges are always one-size. Regular ranges are indexed.
         var type = getType(handA);
@@ -78,7 +80,30 @@ function flattenRange(hands) {
         ranges[type][i] = compareHands(handA, handB) < 0 ? handA : handB;
     });
 
-    return ranges;
+    function stringifyRange(ranges) {
+        /* Convert arrayed ranges to human-readable form. */
+        var offsuitRange = ranges.offsuit;
+        var pairedRange = ranges.pair;
+        var suitedRange = ranges.suited;
+        var wholeRange = pairedRange.concat(suitedRange.concat(offsuitRange));
+
+        // Get rid of non-playable ranges.
+        wholeRange = _.filter(wholeRange, function(hand) { return hand; });
+
+        // Plus-ify.
+        wholeRange = _.map(wholeRange, function(hand) {
+            if (hand == 'AA' || RANKS[hand[0]] == RANKS[hand[1]] + 1) {
+                // If it's aces or the best possible hand of that rank before
+                // becoming a pair or a different rank, don't add a plus.
+                return hand;
+            }
+            return hand + '+';
+        });
+
+        return wholeRange.join(', ');
+    }
+
+    return stringifyRange(ranges);
 }
 
 module.exports = {
