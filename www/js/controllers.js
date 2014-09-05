@@ -4,6 +4,7 @@ var _ = require('underscore');
 var chart = require('./chart');
 require('./controllers/session');
 require('./controllers/villain');
+var PokerUtils = require('./libpoker/utils');
 var Pushbot = require('./libpoker/pushbot');
 require('./picker');
 require('./picker.date');
@@ -24,7 +25,10 @@ angular.module('shuvit.controllers', [
         bb: null,
         ante: null,
         players: 2,
+        range: 20,
     };
+
+    $scope.ENUMERATED_RANGES = PokerUtils.ENUMERATED_RANGES;
 
     function calculateM() {
         // M = stack / pot.
@@ -39,9 +43,9 @@ angular.module('shuvit.controllers', [
     function calculatePushRange() {
         var pushbot = $scope.pushbot;
         if (pushbot.stack && pushbot.bb && pushbot.players) {
-            var pushRange = Pushbot.calcPushbotRange(
+            $scope.range = Pushbot.calcPushbotRange(
                 pushbot.stack, pushbot.bb, pushbot.ante, pushbot.players, 15);
-            console.log(pushRange);
+            $scope.$apply();
         }
     }
 

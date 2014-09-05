@@ -43,7 +43,8 @@ function calcPushbotRange(stack, bb, ante, players, callRangePct) {
             profitableHands.push(hand);
         }
     });
-    return profitableHands;
+
+    return utils.flattenRange(profitableHands);
 }
 
 module.exports = {

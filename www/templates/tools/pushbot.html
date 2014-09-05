@@ -31,11 +31,19 @@
                ng-model="pushbot.players">
         <i class="icon">9</i>
       </div>
-      <div class="button-bar bar-light">
-        <a class="button">Loose</a>
-        <a class="button">Average</a>
-        <a class="button">Tight</a>
+      <div class="item range range-positive item-stacked-label">
+        <i class="icon small">{{ ENUMERATED_RANGES[0] }}%</i>
+        <input type="range" name="range" min="3" max="36" value="20"
+               ng-model="pushbot.range">
+        <i class="icon small">{{ ENUMERATED_RANGES[ENUMERATED_RANGES.length - 1] }}%</i>
       </div>
+
+      <div class="item item-divider">
+        Push Range
+      </div>
+      <label class="item item-text-wrap" ng-show="range">
+        <p>{{ range }}</p>
+      </label>
     </div>
   </ion-content>
 </ion-view>
