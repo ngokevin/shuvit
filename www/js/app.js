@@ -177,6 +177,16 @@ angular.module('shuvit', [
             }
         })
 
+        .state('tab.manage_dropbox', {
+            url: '/manage_dropbox',
+            views: {
+                'settings': {
+                    templateUrl: 'templates/manage_dropbox.html',
+                    controller: 'ManageDropboxCtrl'
+                }
+            }
+        })
+
         .state('tab.raw_data', {
             url: '/raw_data',
             views: {

@@ -1,15 +1,18 @@
 <ion-view title="Settings">
-  <ion-content class="has-header padding">
+  <ion-content class="has-header padding settings">
     <div class="list">
       <div class="item item-divider">
         Accounts
       </div>
-      <a class="item item-icon-left" ng-click="linkDropbox()">
-        <i class="icon"
-           ng-class="{'ion-social-dropbox-outline': !dropboxAuthenticated,
-                      'ion-ios7-checkmark': dropboxAuthenticated}"></i>
-        <span>{{ dropboxAuthenticated && 'Connected with Dropbox' ||
-                                         'Set up Dropbox Sync' }}</span>
+      <a class="item item-icon-left" ui-sref="tab.manage_dropbox"
+         ng-show="dropboxAuthenticated">
+        <i class="icon ion-ios7-checkmark"></i>
+        <span>Connected with Dropbox</span>
+      </a>
+      <a class="item item-icon-left" ng-click="linkDropbox()"
+         ng-show="!dropboxAuthenticated">
+        <i class="icon ion-social-dropbox-outline"></i>
+        <span>Set up Dropbox Sync</span>
       </a>
 
       <div class="item item-divider">

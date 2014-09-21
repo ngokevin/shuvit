@@ -48,16 +48,6 @@
     .money {
         bottom: 17px;
     }
-    .icon {
-        display: inline-block;
-        font-size: 24px;
-        width: 32px;
-
-        + span:not(.money) {
-            bottom: 3px;
-            position: relative;
-        }
-    }
 }
 
 .tracker {

@@ -51,12 +51,12 @@ html body {
 
 .clear-all-data {
     text-align: center;
+}
 
-    .ion-ios7-trash-outline {
-        display: block;
-        font-size: 70px;
-        text-align: center;
-    }
+.icon-header {
+    display: block;
+    font-size: 70px;
+    text-align: center;
 }
 
 label.item-stacked-label {
@@ -93,4 +93,24 @@ button.button-block.submit {
 
 .tabs .tab-item-active {
     color: $calm;
+}
+
+.settings .ion-ios7-checkmark {
+    color: $balanced;
+}
+
+.padding .card {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.card .icon {
+    display: inline-block;
+    font-size: 24px;
+    width: 32px;
+
+    + span:not(.money) {
+        bottom: 3px;
+        position: relative;
+    }
 }

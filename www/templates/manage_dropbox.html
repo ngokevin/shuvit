@@ -1,0 +1,25 @@
+<ion-view title="Manage Dropbox" class="manage-dropbox">
+  <ion-content class="padding">
+    <i class="icon ion-social-dropbox-outline icon-header"></i>
+
+    <div class="card session">
+      <div class="item item-divider">Account Info</div>
+
+      <div class="item item-text-wrap">
+        <i class="icon ion-ios7-person-outline"></i>
+        <span>{{ info.name }}</span>
+      </div>
+
+      <div class="item item-text-wrap">
+        <i class="icon ion-ios7-email-outline"></i>
+        <span>{{ info.email }}</span>
+      </div>
+    </div>
+
+    <a class="button button-block button-assertive"
+        ng-click="signOut()">
+      <i class="icon ion-log-out"></i>
+      Sign Out Dropbox
+    </a>
+  </ion-content>
+</ion-modal-view>

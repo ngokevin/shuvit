@@ -81,7 +81,28 @@ angular.module('shuvit.services', [
         getClient: function() {
             return client;
         },
-        refresh: refresh
+        getAccountInfo: function() {
+            return new Promise(function(resolve, reject) {
+                client.getAccountInfo({}, function(error, info) {
+                    if (error) {
+                        reject(error);
+                    }
+                    resolve(info);
+                });
+            });
+        },
+        refresh: refresh,
+        signOut: function() {
+            return new Promise(function(resolve, reject) {
+                client.signOut({}, function(error) {
+                    if (error) {
+                        reject(error);
+                    } else {
+                        resolve();
+                    }
+                });
+            });
+        }
     };
 }])
 

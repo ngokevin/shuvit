@@ -68,9 +68,6 @@ angular.module('shuvit.controllers', [
     });
 
     $scope.linkDropbox = function() {
-        if (client.isAuthenticated()) {
-            return;
-        }
         client.authenticate({interactive: true}, function(error) {
             if (error) {
                 console.log('Authentication error: ' + error);
@@ -78,6 +75,21 @@ angular.module('shuvit.controllers', [
             }
             DropboxService.refresh();
             $scope.$apply();
+        });
+    };
+}])
+
+.controller('ManageDropboxCtrl',
+    ['$scope', '$state', 'DropboxService',
+    function($scope, $state, DropboxService) {
+    DropboxService.getAccountInfo().then(function(info) {
+        $scope.info = info;
+        $scope.$apply();
+    });
+
+    $scope.signOut = function() {
+        DropboxService.signOut().then(function() {
+            $state.go('tab.settings');
         });
     };
 }])
