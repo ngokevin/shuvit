@@ -1,7 +1,7 @@
 var _ = require('underscore');
 
 var handsVsCommonRangesTable = require('./files/hand_vs_common_ranges_table.json');
-var utils = require('./utils');
+var PokerUtils = require('./utils');
 
 
 function calcPushbotRange(stack, bb, ante, players, callRangePct) {
@@ -21,6 +21,15 @@ function calcPushbotRange(stack, bb, ante, players, callRangePct) {
     bb = parseInt(bb, 10);
     var antes = parseInt(ante || 0, 10) * 10;
     var pot = bb * 1.5 + antes;
+
+    // Round call range percentage to an enumerated calling range.
+    while (PokerUtils.ENUMERATED_RANGES.indexOf(callRangePct) === -1) {
+        callRangePct++;
+        if (callRangePct > 100) {
+            callRangePct = PokerUtils.ENUMERATED_RANGES[
+                PokerUtils.ENUMERATED_RANGES.length - 1];
+        }
+    }
 
     // Probability of someone calling is
     //     = 1 - probability of no one calling.
@@ -44,7 +53,7 @@ function calcPushbotRange(stack, bb, ante, players, callRangePct) {
         }
     });
 
-    return utils.flattenRange(profitableHands);
+    return PokerUtils.flattenRange(profitableHands);
 }
 
 module.exports = {

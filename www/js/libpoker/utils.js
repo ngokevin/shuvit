@@ -109,6 +109,11 @@ function flattenRange(hands) {
             return hand + '+';
         });
 
+        // Sort.
+        wholeRange = _.sortBy(wholeRange, function(range) {
+            return RANKS[range[0]];
+        });
+
         return wholeRange.join(', ');
     }
 

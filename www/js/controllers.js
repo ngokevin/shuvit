@@ -44,13 +44,14 @@ angular.module('shuvit.controllers', [
         var pushbot = $scope.pushbot;
         if (pushbot.stack && pushbot.bb && pushbot.players) {
             $scope.range = Pushbot.calcPushbotRange(
-                pushbot.stack, pushbot.bb, pushbot.ante, pushbot.players, 15);
+                pushbot.stack, pushbot.bb, pushbot.ante, pushbot.players,
+                pushbot.range);
             $scope.$apply();
         }
     }
 
     $scope.$watch('[pushbot.stack, pushbot.bb, pushbot.ante]', calculateM, true);
-    $scope.$watch('[pushbot.stack, pushbot.bb, pushbot.ante, pushbot.players]',
+    $scope.$watch('[pushbot.stack, pushbot.bb, pushbot.ante, pushbot.players, pushbot.range]',
                   _.debounce(calculatePushRange, 500), true);
 }])
 
