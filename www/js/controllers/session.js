@@ -50,6 +50,7 @@ function BaseSessionAddCtrl($rootScope, $scope, $state, SessionService) {
     };
 }
 
+
 angular.module('shuvit.controllers.session', [])
 
 .controller('TrackerCtrl',
@@ -74,6 +75,30 @@ angular.module('shuvit.controllers.session', [])
     }
 
     window.onresize = _.debounce(refreshChart, 100);
+}])
+
+.controller('ChartFiltersCtrl', ['$scope', function($scope) {
+    $scope.filters = {
+        startDate: null,
+        endDate: null,
+    };
+
+    var initialStartDate;
+    var initialEndDate;
+
+    // Set date pickers.
+    $('.datepicker-start').pickadate({
+        'onSet': function(value) {
+            $scope.filters.startDate = value.select;
+            $scope.$$phase || $scope.$apply();
+        }
+    });
+    $('.datepicker-end').pickadate({
+        'onSet': function(value) {
+            $scope.filters.endDate = value.select;
+            $scope.$$phase || $scope.$apply();
+        }
+    });
 }])
 
 .controller('StatsCtrl', ['$scope', 'StatsService', function($scope, StatsService) {

@@ -57,6 +57,16 @@ angular.module('shuvit', [
             }
         })
 
+        .state('tab.chart_filters', {
+            url: '/tracker/chart_filters',
+            views: {
+                'tracker': {
+                    templateUrl: 'templates/chart_filters.html',
+                    controller: 'ChartFiltersCtrl'
+                }
+            }
+        })
+
         .state('tab.stats', {
             url: '/tracker/stats',
             views: {
