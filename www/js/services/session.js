@@ -99,7 +99,7 @@ angular.module('shuvit.services.session', [])
 
     function add(session) {
         if (!SessionModel.validate(session)) {
-                return;
+            return;
         }
 
         // Build the object.

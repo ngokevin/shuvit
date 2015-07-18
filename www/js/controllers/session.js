@@ -6,6 +6,7 @@ require('../picker');
 require('../picker.date');
 var settings = require('../settings');
 
+
 function BaseSessionAddCtrl($rootScope, $scope, $state, SessionService) {
     /* Base controller for add and update session views. */
     $scope.session = {
@@ -58,7 +59,7 @@ angular.module('shuvit.controllers.session', [])
     function($rootScope, $scope, PubSubService, SessionService) {
     var currentChart = chart.CumulativeLineChart('.chart', SessionService.get(), {
         xAxis: {
-            days: 365
+            days: -1
         },
         yAxis: {
             field: 'cumulativeProfit',
