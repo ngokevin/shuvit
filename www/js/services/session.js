@@ -54,6 +54,12 @@ angular.module('shuvit.services.session', [])
 
         var cumulativeProfit = 0;
         var index = 0;
+
+        // Sort first.
+        _sessions = _.sortBy(_sessions, function(session) {
+            return session.date;
+        });
+
         _sessions = _.map(_sessions, function(d) {
             // Add an index.
             d.index = index++;
@@ -135,6 +141,7 @@ angular.module('shuvit.services.session', [])
         del: del,
         update: function(session) {
             // Update just removes the session and re-adds.
+            // Can cause sorting issues.
             del(session.id);
             return add(session);
         },
